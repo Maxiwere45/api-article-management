@@ -6,3 +6,6 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+/discord.xml
+/sonarlint/issuestore/index.pb
+/sonarlint/securityhotspotstore/index.pb
