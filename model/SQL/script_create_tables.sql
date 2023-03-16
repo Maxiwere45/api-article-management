@@ -30,3 +30,4 @@ CREATE TABLE DISLIKES(
     FOREIGN KEY(article_id) REFERENCES ARTICLE(article_id)
 );
 
+
