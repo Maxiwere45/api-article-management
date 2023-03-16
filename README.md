@@ -7,7 +7,7 @@ Informations d'authentification :
 username : username
 password : password
 
-Elèves du binôme :
+Élèves du binôme :
 Amdjad Anrifou (Groupe D)
 Carl Premi (Groupe D)
 
