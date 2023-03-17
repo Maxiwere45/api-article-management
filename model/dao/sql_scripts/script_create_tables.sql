@@ -29,4 +29,3 @@ CREATE TABLE DISLIKES(
     PRIMARY KEY(article_id, id_username),
     FOREIGN KEY(article_id) REFERENCES ARTICLE(article_id)
 );
-
