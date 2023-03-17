@@ -1,6 +1,6 @@
 <?php
 namespace model\dao\requests;
-use Database;
+use model\dao\Database;
 use model\User;
 use PDO;
 
