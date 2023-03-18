@@ -20,6 +20,11 @@ class User
         */
 
     public function __construct($login, $password, $role)
+    /*  Une classe représentant un utilisateur
+     * 
+     *  Cette classe permet de créer des objets utilisateurs
+     *  pour les requetes sur la base de données
+     */
     {
         $this->login = $login;
         $this->password = $password;

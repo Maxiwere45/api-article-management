@@ -1,6 +1,12 @@
 <?php
 
 namespace model;
+/**
+ * Une classe représentant un article
+ *
+ * Cette classe permet de créer des objets articles
+ * pour les requetes sur la base de données
+ */
 
 class Article{
     private $id;
