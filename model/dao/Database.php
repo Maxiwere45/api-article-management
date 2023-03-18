@@ -1,11 +1,12 @@
 <?php
 namespace model\dao;
 
+// Singleton de la connexion à la base de données
 use Exception;
 use PDO;
 
-// Singleton de la connexion à la base de données
-class Database {
+class Database
+{
     private static $instance = null;
     private $connection;
 

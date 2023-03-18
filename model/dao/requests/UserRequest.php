@@ -1,7 +1,9 @@
 <?php
+
 namespace model\dao\requests;
 
-require_once 'C:\wamp64\www\api-article-management\model\dao\Database.php';
+require_once(__DIR__ . "/../../dao/Database.php");
+require_once(__DIR__ . "/../../User.php");
 use model\dao\Database;
 use model\User;
 use PDO;
@@ -20,6 +22,7 @@ class UserRequest
     {
         $this->linkpdo = Database::getInstance('root', "9wms351v")->getConnection();
     }
+
     public function getUser(string $user): User
     {
         /*
@@ -30,7 +33,7 @@ class UserRequest
         $sql = "SELECT * FROM users WHERE username = :username";
         $stmt = $this->linkpdo->prepare($sql);
         $stmt->execute(array(':username' => $user));
-        (array) $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        (array)$data = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$data) {
             die("ERROR 400 : Données introuvable !");
         }
@@ -96,7 +99,7 @@ class UserRequest
         $sql = "DELETE FROM users WHERE username = :username AND password = :password";
         $stmt = $this->linkpdo->prepare($sql);
         $res1 = $stmt->execute(array(':username' => $user,
-                                    ':password' => $user));
+            ':password' => $user));
 
         // Vrai si toutes les requêtes ont été exécutées
         return $res1 && $res2 && $res3 && $res4;

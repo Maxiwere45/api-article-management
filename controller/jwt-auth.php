@@ -2,7 +2,6 @@
 namespace controller;
 
 include_once '../model/dao/requests/UserRequest.php';
-use model\User;
 use model\dao\requests\UserRequest;
 
 require_once '../libs/jwt-utils.php';
@@ -14,9 +13,9 @@ header("Content-Type:application/json");
 $http_method = $_SERVER['REQUEST_METHOD'];
 if ($http_method == 'POST') {
     $data = (array) json_decode(file_get_contents('php://input'), true);
+    $userRequest = new UserRequest();
     if (isValidUser($data['username'], $data['password'])) {
         // Traitement
-        $userRequest = new UserRequest();
         $username = $userRequest->getUser($data['username']);
         $headers = array(
             'typ' => 'JWT',
@@ -29,9 +28,9 @@ if ($http_method == 'POST') {
             'exp' => (time() + 60)
         );
         $jwt = generate_jwt($headers, $payload);
-        deliverResponse(200, "Vous êtes connecté en tant que ".$username->getLogin()." avec le role", $jwt);
+        deliverResponse(200, "Vous êtes connecté en tant que ".$username->getLogin()." avec le role ".$username->getRole()." ", $jwt);
     } else {
-        deliverResponse(401, "Login ou mot de passe incorrect, veuillez reessayer de nouveau !", null);
+        deliverResponse(401, "Login ou mot de passe incorrect veuillez reessayer de nouveau !", null);
     }
 }
 
@@ -55,7 +54,8 @@ function isValidUser($username, $password): bool
     $userRequest = new UserRequest();
     // Protection contre les injections SQL et XSS
     $user = htmlspecialchars($username);
-    $pass = htmlspecialchars($password);
+    $pass = hash('sha256', htmlspecialchars($password));
+
     if ($user == $userRequest->getUser($user)->getLogin()
         && $pass == $userRequest->getUser($user)->getPassword()) {
         return true;
