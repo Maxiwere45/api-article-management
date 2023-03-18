@@ -30,7 +30,7 @@ if ($http_method == 'POST') {
         $jwt = generate_jwt($headers, $payload);
         deliverResponse(200, "Vous êtes connecté en tant que $username avec le role", $jwt);
     } else {
-        deliverResponse(401, "Login/mdp incorrect, veuillez reessayer de nouveau !", null);
+        deliverResponse(401, "Login ou mot de passe incorrect, veuillez reessayer de nouveau !", null);
     }
 }
 
