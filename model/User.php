@@ -37,4 +37,8 @@ class User
             'role' => $this->role
         );
     }
+    public function isModerator(): bool {
+        return $this->role === 'moderator';
+    }
+    
 }

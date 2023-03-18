@@ -28,8 +28,13 @@ class UserRequest
         if (!$data) {
             die("ERROR 400 : Données introuvable !");
         }
-        return new User($data['username'], $data['password'], $data['role']);
+        $userObj = new User($data['username'], $data['password'], $data['role']);
+    if (!$userObj->isModerator()) {
+        die("ERROR 403 : Permission refusée !");
     }
+    return $userObj;
+}
+
 
     public function getAllUsers(): array
     {
