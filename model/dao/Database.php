@@ -10,13 +10,13 @@ class Database {
     private static $instance = null;
     private $connection;
 
-    private function __construct($login, $password) {
+    private function __construct($login, $password)
+    {
         try {
             ini_set("error_log", "../../logs/journal.log");
-            $this->connection = new PDO("mysql:host=localhost;dbname=rest_api;charset=UTF8", $login, decoder($password,"thou"));
+            $this->connection = new PDO("mysql:host=localhost;dbname=rest_api;charset=UTF8", $login, decoder($password, "thou"));
             error_log("Connexion à la base de données réussie");
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             die('Erreur : ' . $e->getMessage());
         }
     }
@@ -32,6 +32,11 @@ class Database {
     public function getConnection(): PDO
     {
         return $this->connection;
+    }
+
+    public function __destruct()
+    {
+        $this->connection = null;
     }
 }
 

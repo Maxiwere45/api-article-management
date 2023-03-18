@@ -30,4 +30,13 @@ class Article{
     public function getAuthor() {
         return $this->author;
     }
+
+    public function toArray(): array {
+        return array(
+            'id' => $this->id,
+            'content' => $this->content,
+            'date_add' => $this->date_add,
+            'author' => $this->author
+        );
+    }
 }

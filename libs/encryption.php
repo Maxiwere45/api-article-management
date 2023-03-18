@@ -1,4 +1,5 @@
 <?php
+
 function decoder($text, $key): string
 {
     $key_len = strlen($key);

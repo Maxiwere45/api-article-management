@@ -3,47 +3,38 @@ namespace model;
 
 class User
 {
-    private $id;
     private $login;
     private $password;
     private $role;
 
-    public function __construct($id, $login, $password, $role) {
-        $this->id = $id;
+    public function __construct($login, $password, $role)
+    {
         $this->login = $login;
         $this->password = $password;
         $this->role = $role;
     }
 
-    public function getId() {
-        return $this->id;
-    }
-
-    public function getLogin() {
+    public function getLogin(): string
+    {
         return $this->login;
     }
 
-    public function getPassword() {
+    public function getPassword(): string
+    {
         return $this->password;
     }
 
-    public function getRole() {
+    public function getRole(): string
+    {
         return $this->role;
     }
 
-    public function setId($id) {
-        $this->id = $id;
-    }
-
-    public function setLogin($login) {
-        $this->login = $login;
-    }
-
-    public function setPassword($password) {
-        $this->password = $password;
-    }
-
-    public function setRole($role) {
-        $this->role = $role;
+    public function toArray(): array
+    {
+        return array(
+            'login' => $this->login,
+            'password' => $this->password,
+            'role' => $this->role
+        );
     }
 }
