@@ -2,6 +2,7 @@
 namespace controller;
 
 use model\dao\requests\UserRequest;
+use model\User;
 
 require_once '../libs/jwt-utils.php';
 
@@ -14,14 +15,16 @@ if ($http_method == 'POST') {
     $data = (array) json_decode(file_get_contents('php://input'), true);
     if (isValidUser($data['username'], $data['password'])) {
         // Traitement
-        $username = htmlspecialchars($data['username']);
+        $userRequest = new UserRequest();
+        $username = $userRequest->getUser($data['username']);
         $headers = array(
             'typ' => 'JWT',
             'alg' => 'HS256'
         );
 
         $payload = array(
-            'username' => $username,
+            'username' => $username->getLogin(),
+            'role' => $username->getRole(),
             'exp' => (time() + 60)
         );
         $jwt = generate_jwt($headers, $payload);
