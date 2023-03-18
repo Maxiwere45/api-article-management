@@ -1,6 +1,7 @@
 <?php
 namespace model\dao\requests;
 
+require_once 'C:\wamp64\www\api-article-management\model\dao\Database.php';
 use model\dao\Database;
 use model\User;
 use PDO;
@@ -21,6 +22,11 @@ class UserRequest
     }
     public function getUser(string $user): User
     {
+        /*
+        if (!$userObj->isModerator()) {
+            die("ERROR 403 : Permission refusée !");
+        }
+        */
         $sql = "SELECT * FROM users WHERE username = :username";
         $stmt = $this->linkpdo->prepare($sql);
         $stmt->execute(array(':username' => $user));
@@ -28,12 +34,8 @@ class UserRequest
         if (!$data) {
             die("ERROR 400 : Données introuvable !");
         }
-        $userObj = new User($data['username'], $data['password'], $data['role']);
-    if (!$userObj->isModerator()) {
-        die("ERROR 403 : Permission refusée !");
+        return new User($data['username'], $data['password'], $data['role']);;
     }
-    return $userObj;
-}
 
 
     public function getAllUsers(): array

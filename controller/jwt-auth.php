@@ -1,8 +1,9 @@
 <?php
 namespace controller;
 
-use model\dao\requests\UserRequest;
+include_once '../model/dao/requests/UserRequest.php';
 use model\User;
+use model\dao\requests\UserRequest;
 
 require_once '../libs/jwt-utils.php';
 

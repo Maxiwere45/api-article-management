@@ -11,7 +11,7 @@ function generate_jwt($headers, $payload, $secret = 'secret'): string {
     return "$headers_encoded.$payload_encoded.$signature_encoded";
 }
 
-function is_jwt_valid($jwt, $secret = 'secret'): bool
+function is_jwt_valid($jwt, $secret = 'crococarl'): bool
 {
     // split the jwt
     $tokenParts = explode('.', $jwt);
