@@ -2,13 +2,16 @@
 
 namespace model\dao\requests;
 
+require_once(__DIR__ . "/../../dao/Database.php");
+require_once(__DIR__ . "/../../Article.php");
 use model\Article;
 use model\dao\Database;
+use PDO;
 
 /*
  * Cette classe contient toutes les requêtes SQL pour les modérateurs
  */
-class ModeratorRequest
+class MOPRequest
 {
     private $linkpdo;
 
@@ -82,5 +85,27 @@ class ModeratorRequest
         $data = $stmt->fetch();
         return $data[0];
     }
+
+    /*
+     * Cette fonction retourne les utilisateurs qui ont liké un article
+     * @param Article $article
+     * @return array
+     */
+    public function getUsersWhoLiked(Article $article)
+    {
+        $sql = "SELECT * FROM likes WHERE article_id = :id";
+        $stmt = $this->linkpdo->prepare($sql);
+        $stmt->execute(array(':id' => $article->getId()));
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getUsersWhoDisliked(Article $article)
+    {
+        $sql = "SELECT * FROM dislikes WHERE article_id = :id";
+        $stmt = $this->linkpdo->prepare($sql);
+        $stmt->execute(array(':id' => $article->getId()));
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
 }

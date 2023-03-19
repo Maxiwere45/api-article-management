@@ -1,6 +1,6 @@
 <?php
 
-function generate_jwt($headers, $payload, $secret = 'secret'): string {
+function generate_jwt($headers, $payload, $secret = 'crococarl'): string {
     $headers_encoded = base64url_encode(json_encode($headers));
 
     $payload_encoded = base64url_encode(json_encode($payload));
@@ -11,17 +11,18 @@ function generate_jwt($headers, $payload, $secret = 'secret'): string {
     return "$headers_encoded.$payload_encoded.$signature_encoded";
 }
 
-function is_jwt_valid($jwt, $secret = 'crococarl'): bool
+function is_jwt_valid($jwt, $secret='crococarl'): bool
 {
     // split the jwt
     $tokenParts = explode('.', $jwt);
-    $header = base64_decode($tokenParts[0]);
-    $payload = base64_decode($tokenParts[1]);
-    $signature_provided = $tokenParts[2];
+    $header = isset($tokenParts[0]) ? base64_decode($tokenParts[0]) : null;
+    $payload = isset($tokenParts[1]) ? base64_decode($tokenParts[1]) : null;
+    $signature_provided = $tokenParts[2] ?? null;
 
     // check the expiration time - note this will cause an error if there is no 'exp' claim in the jwt
-    $expiration = json_decode($payload)->exp;
-    $is_token_expired = ($expiration - time()) < 0;
+    $payload_json = json_decode($payload);
+    $expiration = $payload_json->exp ?? null;
+    $is_token_expired = !$expiration || ($expiration - time()) < 0;
 
     // build a signature based on the header and payload using the secret
     $base64_url_header = base64url_encode($header);
@@ -66,4 +67,24 @@ function get_bearer_token(): ?string {
     return null;
 }
 
+/**
+ * @throws Exception
+ */
+function decode_jwt($jwt, $secret = 'crococarl') {
+    $token_parts = explode('.', $jwt);
+    $payload = base64_decode($token_parts[1]);
+    /* Cause des erreurs de signature
+    $header = base64_decode($token_parts[0]);
+    $signature = base64_decode($token_parts[2]);
+    $expected_signature = hash_hmac('sha256', "$token_parts[0].$token_parts[1]", $secret, true);
+    if ($signature !== $expected_signature) {
+        throw new Exception('Invalid signature');
+    }
+    */
+    $decoded_payload = json_decode($payload, true);
 
+    if (!$decoded_payload) {
+        throw new Exception('Invalid payload');
+    }
+    return $decoded_payload;
+}

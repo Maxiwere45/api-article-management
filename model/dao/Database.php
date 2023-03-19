@@ -13,9 +13,7 @@ class Database
     private function __construct($login, $password)
     {
         try {
-            ini_set("error_log", "../../logs/journal.log");
             $this->connection = new PDO("mysql:host=localhost;dbname=api-articles-db;charset=UTF8", $login, $this->decoder($password, "thou"));
-            error_log("Connexion à la base de données réussie");
         } catch (Exception $e) {
             die('Erreur : ' . $e->getMessage());
         }

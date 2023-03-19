@@ -1,5 +1,4 @@
 <?php
-
 namespace model\dao\requests;
 
 require_once(__DIR__ . "/../../dao/Database.php");
@@ -25,11 +24,6 @@ class UserRequest
 
     public function getUser(string $user): User
     {
-        /*
-        if (!$userObj->isModerator()) {
-            die("ERROR 403 : Permission refusée !");
-        }
-        */
         $sql = "SELECT * FROM users WHERE username = :username";
         $stmt = $this->linkpdo->prepare($sql);
         $stmt->execute(array(':username' => $user));
@@ -37,21 +31,7 @@ class UserRequest
         if (!$data) {
             die("ERROR 400 : Données introuvable !");
         }
-        return new User($data['username'], $data['password'], $data['role']);;
-    }
-
-
-    public function getAllUsers(): array
-    {
-        $sql = "SELECT * FROM users";
-        $stmt = $this->linkpdo->prepare($sql);
-        $stmt->execute();
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $users = array();
-        foreach ($data as $user) {
-            $users[] = new User($user['username'], $user['password'], $user['role']);
-        }
-        return $users;
+        return new User($data['username'], $data['password'], $data['role']);
     }
 
     public function insertUser(User $user): bool
@@ -61,7 +41,7 @@ class UserRequest
         $stmt = $this->linkpdo->prepare($sql);
         return $stmt->execute(array(
             ':username' => $user->getLogin(),
-            ':password' => $user->getPassword(),
+            ':password' => hash('sha256', $user->getPassword()),
             ':role' => $user->getRole()
         ));
     }

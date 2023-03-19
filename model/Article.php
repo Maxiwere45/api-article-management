@@ -40,9 +40,9 @@ class Article{
     public function toArray(): array {
         return array(
             'id' => $this->id,
+            'author' => $this->author,
             'content' => $this->content,
-            'date_add' => $this->date_add,
-            'author' => $this->author
+            'date_add' => $this->date_add
         );
     }
 }

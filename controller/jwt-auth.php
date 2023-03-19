@@ -3,7 +3,6 @@ namespace controller;
 
 include_once '../model/dao/requests/UserRequest.php';
 use model\dao\requests\UserRequest;
-
 require_once '../libs/jwt-utils.php';
 
 // Paramétrage de l'entête HTTP (pour la réponse au Client)
@@ -25,7 +24,7 @@ if ($http_method == 'POST') {
         $payload = array(
             'username' => $username->getLogin(),
             'role' => $username->getRole(),
-            'exp' => (time() + 60)
+            'exp' => (time() + 180)
         );
         $jwt = generate_jwt($headers, $payload);
         deliverResponse(200, "Vous êtes connecté en tant que ".$username->getLogin()." avec le role ".$username->getRole()." ", $jwt);

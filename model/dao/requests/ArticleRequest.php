@@ -1,13 +1,17 @@
 <?php
 namespace model\dao\requests;
 
+require_once(__DIR__ . "/../../dao/Database.php");
+require_once(__DIR__ . "/../../User.php");
+require_once(__DIR__ . "/../../Article.php");
 use model\Article;
 use model\dao\Database;
 use model\User;
 use PDO;
 
 
-class ArticleRequest{
+class ArticleRequest
+{
     private $linkpdo;
     public function __construct()
     {
@@ -30,26 +34,31 @@ class ArticleRequest{
         return $articles;
     }
 
-    public function getArticle(Article $article, User $user): Article
+    public function getArticle(string $article_id, User $user): Article
     {
-        if ($user->getRole() == "moderator" || $user->getRole() == "publisher") {
+        if ($user->isModerator() || $user->isPublisher()) {
             $sql = "SELECT * FROM article WHERE article_id = :id";
         } else {
-            $sql = "SELECT author, content, date_de_publication FROM article";
+            $sql = "SELECT author, content, date_de_publication FROM article WHERE article_id = :id";
         }
 
         $stmt = $this->linkpdo->prepare($sql);
-        $stmt->execute(array(':id' => $article->getId()));
-        (array) $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->execute(array(':id' => $article_id));
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$data) {
             die("ERROR 400 : Article introuvable !");
         }
-        return new Article($data['article_id'], $data['title'], $data['content'], $data['author'], $data['date']);
+        if (!array_key_exists('article_id', $data)) {
+            return new Article("(=_=)", $data['content'], $data['date_de_publication'], $data['author']);
+        } else {
+            return new Article($data['article_id'], $data['content'], $data['date_de_publication'], $data['author']);
+        }
     }
+
 
     public function getAllArticles(User $user): array
     {
-        if ($user->getRole() == "moderator" || $user->getRole() == "publisher") {
+        if ($user->isModerator() || $user->isPublisher()) {
             $sql = "SELECT * FROM article";
         } else {
             $sql = "SELECT author, content, date_de_publication FROM article";
@@ -57,11 +66,10 @@ class ArticleRequest{
         $stmt = $this->linkpdo->prepare($sql);
         $stmt->execute();
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $articles = array();
-        foreach ($data as $article) {
-            $articles[] = new Article($article['article_id'], $article['title'], $article['content'], $article['author'], $article['date']);
+        if (!$data) {
+            die("ERROR 400 : Articles introuvable !");
         }
-        return $articles;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function insertArticle(Article $article): bool
@@ -73,7 +81,7 @@ class ArticleRequest{
             ':article_id' => $article->getId(),
             ':content' => $article->getContent(),
             ':author' => $article->getAuthor(),
-            ':date' => $article->getDate_add()
+            ':date_publish' => $article->getDate_add()
         ));
     }
 

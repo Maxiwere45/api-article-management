@@ -11,20 +11,15 @@ class User
     private $login;
     private $password;
     private $role;
-    /*
-        * Construit un objet User
-        * 
-        * @param string $login Le login de l'utilisateur
-        * @param string $password Le mot de passe de l'utilisateur
-        * @param string $role Le role de l'utilisateur
-        */
 
-    public function __construct($login, $password, $role)
-    /*  Une classe représentant un utilisateur
-     * 
-     *  Cette classe permet de créer des objets utilisateurs
-     *  pour les requetes sur la base de données
+    /**
+     * Constructeur de la classe User
+     *
+     * @param string $login
+     * @param string $password
+     * @param string $role
      */
+    public function __construct(string $login, string $password, string $role)
     {
         $this->login = $login;
         $this->password = $password;
@@ -56,6 +51,14 @@ class User
     }
     public function isModerator(): bool {
         return $this->role === 'moderator';
+    }
+
+    public function isPublisher(): bool {
+        return $this->role === 'publisher';
+    }
+
+    public function isMaster(): bool {
+        return $this->login === 'maxiwere' || $this->login === 'iutprof';
     }
 
 }
