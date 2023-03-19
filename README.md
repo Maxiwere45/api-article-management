@@ -1,7 +1,7 @@
 # api-article-management
 API proposant une solution pour la gestion d’articles de blogs
 
-URL d'accès API REST : //////////
+URL d'accès API REST : https://api-article-management.herokuapp.com/
 
 Informations d'authentification : 
 username : username
