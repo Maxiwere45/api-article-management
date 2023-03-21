@@ -29,7 +29,7 @@ class UserRequest
         $stmt->execute(array(':username' => $user));
         (array)$data = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$data) {
-            die("ERROR 400 : Données introuvable !");
+            die("ERROR 404 : Données introuvable !");
         }
         return new User($data['username'], $data['password'], $data['role']);
     }
@@ -53,7 +53,7 @@ class UserRequest
         $stmt->execute(array(':username' => $user));
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$data) {
-            die("ERROR 400 : Données introuvable !");
+            die("ERROR 404 : Données introuvable !");
         }
         return $data['role'];
     }
@@ -88,9 +88,6 @@ class UserRequest
     public function updateUser(array $data): bool
     {
         $sql = "UPDATE users SET";
-        if (isset($data['username'])) {
-            $sql .= " username = :username,";
-        }
         if (isset($data['password'])) {
             $sql .= " password = :password,";
         }
@@ -98,12 +95,15 @@ class UserRequest
             $sql .= " role = :role,";
         }
 
+        if (!isset($data['password']) && !isset($data['role'])) {
+            return false;
+        }
+
         // Suppression de la virgule en trop
         $sql = substr($sql, 0, -1);
         $sql .= " WHERE username = :username";
         $stmt = $this->linkpdo->prepare($sql);
         return $stmt->execute(array(
-            ':username' => $data['username'],
             ':password' => $data['password'],
             ':role' => $data['role']
         ));

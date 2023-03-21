@@ -25,7 +25,7 @@ class ArticleRequest
         $stmt->execute(array(':author' => $user->getLogin()));
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if (!$data) {
-            die("ERROR 400 : Articles introuvable !");
+            die("ERROR 404 : Articles introuvable !");
         }
         $articles = array();
         foreach ($data as $article) {
@@ -34,27 +34,17 @@ class ArticleRequest
         return $articles;
     }
 
-    public function getArticle(string $article_id, User $user): Article
+    public function getArticle(string $article_id): Article
     {
-        if ($user->isModerator() || $user->isPublisher()) {
-            $sql = "SELECT * FROM article WHERE article_id = :id";
-        } else {
-            $sql = "SELECT author, content, date_de_publication FROM article WHERE article_id = :id";
-        }
-
+        $sql = "SELECT * FROM article WHERE article_id = :id";
         $stmt = $this->linkpdo->prepare($sql);
         $stmt->execute(array(':id' => $article_id));
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$data) {
-            die("ERROR 400 : Article introuvable !");
+            die("ERROR 404 : Article introuvable !");
         }
-        if (!array_key_exists('article_id', $data)) {
-            return new Article("(=_=)", $data['content'], $data['date_de_publication'], $data['author']);
-        } else {
-            return new Article($data['article_id'], $data['content'], $data['date_de_publication'], $data['author']);
-        }
+        return new Article($data['article_id'], $data['content'], $data['date_de_publication'], $data['author']);
     }
-
 
     public function getAllArticles(User $user): array
     {
@@ -67,9 +57,9 @@ class ArticleRequest
         $stmt->execute();
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if (!$data) {
-            die("ERROR 400 : Articles introuvable !");
+            die("ERROR 404 : Articles introuvable !");
         }
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
     }
 
     public function insertArticle(Article $article): bool
@@ -83,6 +73,34 @@ class ArticleRequest
             ':author' => $article->getAuthor(),
             ':date_publish' => $article->getDate_add()
         ));
+    }
+
+    public function updateArticle(array $values, User $user): bool
+    {
+        if (!$user->isPublisher()) {
+            die("ERROR 403 : Vous n'avez pas les droits pour modifier cet article !");
+        }
+
+        $article = $this->getArticle($values['article_id']);
+        if ($article->getAuthor() != $user->getLogin()) {
+            die("ERROR 403 : Vous n'avez pas les droits pour modifier cet article !");
+        }
+
+        $sql = "UPDATE article SET ";
+        $params = array();
+        foreach ($values as $key => $value) {
+            if ($key == 'article_id') {
+                continue;
+            }
+            $sql .= $key . " = ?, ";
+            $params[] = $value;
+        }
+        $sql = rtrim($sql, ", ");
+        $sql .= " WHERE id = ?";
+        $params[] = $values['article_id'];
+        $stmt = $this->linkpdo->prepare($sql);
+
+        return $stmt->execute($params);
     }
 
     public function deleteArticle(Article $article, User $user): bool

@@ -1,8 +1,14 @@
 <?php
 namespace controller;
 
-include_once '../model/dao/requests/UserRequest.php';
+require_once(__DIR__ . "/../model/dao/requests/UserRequest.php");
+require_once(__DIR__ . "/../model/User.php");
+require_once __DIR__ . "/../libs/functions_utils.php";
+require_once(__DIR__ . "/../libs/jwt-utils.php");
 use model\dao\requests\UserRequest;
+use function libs\deliverResponse;
+use function libs\isValidUser;
+
 require_once '../libs/jwt-utils.php';
 
 // Paramétrage de l'entête HTTP (pour la réponse au Client)
@@ -31,33 +37,4 @@ if ($http_method == 'POST') {
     } else {
         deliverResponse(401, "Login ou mot de passe incorrect veuillez reessayer de nouveau !", null);
     }
-}
-
-function deliverResponse($status, $statusMessage, $data)
-{
-    // Paramétrage de l'entête HTTP, suite
-    header("HTTP/1.1 $status $statusMessage");
-
-    // Paramétrage de la réponse retournée
-    $response['status'] = $status;
-    $response['status_message'] = $statusMessage;
-    $response['jeton'] = $data;
-
-    // Mapping de la réponse au format JSON
-    $jsonResponse = json_encode($response);
-    echo $jsonResponse;
-}
-
-function isValidUser($username, $password): bool
-{
-    $userRequest = new UserRequest();
-    // Protection contre les injections SQL et XSS
-    $user = htmlspecialchars($username);
-    $pass = hash('sha256', htmlspecialchars($password));
-
-    if ($user == $userRequest->getUser($user)->getLogin()
-        && $pass == $userRequest->getUser($user)->getPassword()) {
-        return true;
-    }
-    return false;
 }

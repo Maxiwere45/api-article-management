@@ -94,7 +94,7 @@ class ReactionRequest
         ));
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($data) {
-            die("ERROR 400 : Vous avez deja dislike cet article !");
+            die("ERROR 403 : Vous avez deja dislike cet article !");
         }
         $sql = "SELECT * FROM likes WHERE article_id = :article_id AND id_username = :id_username";
         $stmt = $this->linkpdo->prepare($sql);
@@ -110,7 +110,7 @@ class ReactionRequest
 
         // Verifier si l'utilisateur est l'auteur de l'article
         if ($article->getAuthor()->getLogin() == $user->getLogin()) {
-            die("ERROR 400 : Vous ne pouvez pas disliker votre propre article !");
+            die("ERROR 403 : Vous ne pouvez pas disliker votre propre article !");
         }
 
         // Ajouter le dislike

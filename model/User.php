@@ -57,6 +57,10 @@ class User
         return $this->role === 'publisher';
     }
 
+    /**
+     * Cette fonction permet de savoir si l'utilisateur est un administrateur suprême
+     * @return bool
+     */
     public function isMaster(): bool {
         return $this->login === 'maxiwere' || $this->login === 'iutprof';
     }
