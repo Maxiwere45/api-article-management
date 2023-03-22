@@ -45,4 +45,8 @@ class Article{
             'date_add' => $this->date_add
         );
     }
+
+    function isAuthor(Article $article, int $user_id): bool {
+        return $article->getAuthor() === $user_id;
+    }
 }
