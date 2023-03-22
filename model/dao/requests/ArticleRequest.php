@@ -96,8 +96,8 @@ class ArticleRequest
             $params[] = $value;
         }
         $sql = rtrim($sql, ", ");
-        $sql .= " WHERE id = ?";
-        $params[] = $values['article_id'];
+        $sql .= " WHERE article_id = ?";
+        $params[] = $values['id'];
         $stmt = $this->linkpdo->prepare($sql);
 
         return $stmt->execute($params);

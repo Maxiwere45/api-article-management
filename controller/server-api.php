@@ -3,12 +3,14 @@ require_once(__DIR__ . "/../libs/jwt-utils.php");
 require_once(__DIR__ . "/../model/dao/requests/ArticleRequest.php");
 require_once(__DIR__ . "/../model/dao/requests/UserRequest.php");
 require_once(__DIR__ . "/../model/dao/requests/MOPRequest.php");
-require_once __DIR__ . "/../libs/functions_utils.php";
+require_once(__DIR__ . "/../model/dao/requests/ReactionRequest.php");
+require_once (__DIR__ . "/../libs/functions_utils.php");
 require_once(__DIR__ . "/../model/Article.php");
 // Identification du type de méthode HTTP envoyée par le client
 use model\Article;
 use model\dao\requests\ArticleRequest;
 use model\dao\requests\MOPRequest;
+use model\dao\requests\ReactionRequest;
 use model\dao\requests\UserRequest;
 use model\User;
 use function libs\deliverResponse;
@@ -124,8 +126,9 @@ switch ($http_method) {
         }
         break;
     // Cas de la méthode PUT
-    case "PUT" :
+    case "PUT":
         $bearer_token = get_bearer_token();
+        $reactionRequest = new ReactionRequest();
         if (is_jwt_valid($bearer_token)) {
             try {
                 $user = getJWTUser($bearer_token, $userRequest);
@@ -136,34 +139,75 @@ switch ($http_method) {
             $postedData = file_get_contents('php://input');
             $data = json_decode($postedData, true);
             // Traitement
-            if ($user->isPublisher()) {
-                $data['auteur'] = $user->getLogin();
-                $data['date_de_publication'] = date('Y-m-d H:i:s');
-                $article = new Article($data['id'], $data['contenu'], $data['date_de_publication'], $data['auteur']);
-                $res = $articleRequest->updateArticle($data, $user);
-                // Envoi de la réponse au Client
-                deliverResponse(200, "L'article a bien ete modifie", $data);
+            if (isset($_GET['edit'])) {
+                $edit_type = htmlspecialchars($_GET['edit']);
+                switch ($edit_type) {
+                    case "article":
+                        if ($user->isPublisher()) {
+                            $res = $articleRequest->updateArticle($data, $user);
+                        } else {
+                            deliverResponse(403, "Vous n'êtes pas autorisé à accéder à cette fonction", null);
+                        }
+                        break;
+                    case "user":
+                        if ($user->isModerator()) {
+                            $res = $userRequest->updateUser($data, $user);
+                        } else {
+                            deliverResponse(403, "Vous n'êtes pas autorisé à accéder à cette fonction", null);
+                        }
+                        break;
+                    case "unlike":
+                        if ($user->isPublisher()) {
+                            $article = $articleRequest->getArticle($data['id']);
+                            $res = $reactionRequest->unlikerArticle($article, $user);
+                            deliverResponse(200, "Le like a ete retire !", $data);
+                        } else {
+                            deliverResponse(403, "Vous n'êtes pas autorisé à accéder à cette fonction", null);
+                        }
+                        break;
+                    case "undislike":
+                        if ($user->isPublisher()) {
+                            $article = $articleRequest->getArticle($data['id']);
+                            $res = $reactionRequest->undislikerArticle($article, $user);
+                            deliverResponse(200, "Le dislike a ete retire !", $data);
+                        } else {
+                            deliverResponse(403, "Vous n'êtes pas autorisé à accéder à cette fonction", null);
+                        }
+                        break;
+                    default:
+                        deliverResponse(403, "Vous n'êtes pas autorisé à accéder à cette fonction", null);
+                        break;
+                }
             } else {
                 deliverResponse(403, "Vous n'êtes pas autorisé à accéder à cette fonction", null);
             }
         } else {
-            deliverResponse(403, "Vous n'êtes pas autorisé à accéder à cette ressource", null);
+            deliverResponse(403, "REQUEST Inconnue !", null);
         }
         break;
-        /*
-// Cas de la méthode DELETE
-case 'DELETE':
-    // Récupération de l'identifiant de la ressource envoyé par le Client
-    if (!empty($_GET['id'])) {
-        // Traitement
-        $res = $request->deleteElement($linkpdo, $_GET['id']);
-        // Envoi de la réponse au Client
-        deliverResponse(200, "Votre message", "SUCCES");
-    } else {
-        deliverResponse(405, "Votre message", "ERROR");
-    }
-    break;
-*/
+    // Cas de la méthode DELETE
+    case "DELETE":
+        $bearer_token = get_bearer_token();
+        if (is_jwt_valid($bearer_token)) {
+            try {
+                $user = getJWTUser($bearer_token, $userRequest);
+            } catch (Exception $e) {
+                die($e->getMessage());
+            }
+            // Récupération de l'id de l'article à supprimer
+            $id = htmlspecialchars($_GET['id']);
+            $article = $articleRequest->getArticle($id);
+            // Si l'utilisateur est un éditeur et l'auteur de l'article ou un modérateur, il peut supprimer l'article
+            if ($user->isPublisher() && $article->getAuthor() == $user->getLogin() || $user->isModerator()) {
+                $articleRequest->deleteArticle($article, $user);
+                deliverResponse(200, "L'article a été supprimé avec succès", null);
+            } else {
+                deliverResponse(403, "Vous n'êtes pas autorisé à supprimer cet article", null);
+            }
+        } else {
+            deliverResponse(404, "L'article n'a pas été trouvé", null);
+        }
+        break;
     default:
         // Récupération de l'identifiant de la ressource envoyé par le Client
         if (!empty($_GET['id'])) {
@@ -174,7 +218,6 @@ case 'DELETE':
         deliverResponse(200, "Votre message", null);
         break;
 }
-
 /*
 echo '<pre>';
 print_r($request->getElement($linkpdo, 'chuckn_facts',5));

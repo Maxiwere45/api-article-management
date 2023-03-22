@@ -200,6 +200,4 @@ class ReactionRequest
         }
         return true;
     }
-
-
 }

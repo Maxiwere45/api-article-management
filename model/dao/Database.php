@@ -13,7 +13,11 @@ class Database
     private function __construct($login, $password)
     {
         try {
-            $this->connection = new PDO("mysql:host=localhost;dbname=api-articles-db;charset=UTF8", $login, $this->decoder($password, "thou"));
+            if (php_uname('n') == "MAXIWERE-IUT"){
+                $this->connection = new PDO("mysql:host=localhost;dbname=api-article-db;charset=UTF8", $login, $this->decoder($password, "thou"));
+            } else {
+                $this->connection = new PDO("mysql:host=localhost;dbname=api-articles-db;charset=UTF8", $login, $this->decoder($password, "thou"));
+            }
         } catch (Exception $e) {
             die('Erreur : ' . $e->getMessage());
         }

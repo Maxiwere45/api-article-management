@@ -62,7 +62,8 @@ class User
      * @return bool
      */
     public function isMaster(): bool {
-        return $this->login === 'maxiwere' || $this->login === 'iutprof';
+        return $this->login === 'maxiwere' ||
+                 $this->login === 'iutprof';
     }
 
 }
