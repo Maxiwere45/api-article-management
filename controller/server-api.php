@@ -150,20 +150,35 @@ switch ($http_method) {
             deliverResponse(403, "Vous n'êtes pas autorisé à accéder à cette ressource", null);
         }
         break;
-        /*
-// Cas de la méthode DELETE
-case 'DELETE':
-    // Récupération de l'identifiant de la ressource envoyé par le Client
-    if (!empty($_GET['id'])) {
-        // Traitement
-        $res = $request->deleteElement($linkpdo, $_GET['id']);
-        // Envoi de la réponse au Client
-        deliverResponse(200, "Votre message", "SUCCES");
+        
+    // Cas de la méthode DELETE
+    case "DELETE":
+        $bearer_token = get_bearer_token();
+        if (is_jwt_valid($bearer_token)) {
+            try {
+                $user = getJWTUser($bearer_token, $userRequest);
+            } catch (Exception $e) {
+                die($e->getMessage());
+            }
+            // Récupération de l'id de l'article à supprimer
+            $id = htmlspecialchars($_GET['id']);
+            $article = $articleRequest->getArticle($id);
+            if ($article) {
+            // Si l'utilisateur est un éditeur et l'auteur de l'article ou un modérateur, il peut supprimer l'article
+            if ($user->isPublisher() && $article->getAuthor() == $user->getLogin() || $user->isModerator()) {
+                $articleRequest->deleteArticle($article, $user);
+                deliverResponse(200, "L'article a été supprimé avec succès", null);
+            } else {
+                deliverResponse(403, "Vous n'êtes pas autorisé à supprimer cet article", null);
+            }
+        } else {
+            deliverResponse(404, "L'article n'a pas été trouvé", null);
+        }
     } else {
-        deliverResponse(405, "Votre message", "ERROR");
+        deliverResponse(401, "Vous devez vous authentifier pour accéder à cette ressource", null);
     }
     break;
-*/
+
     default:
         // Récupération de l'identifiant de la ressource envoyé par le Client
         if (!empty($_GET['id'])) {
@@ -175,11 +190,6 @@ case 'DELETE':
         break;
 }
 
-/*
-echo '<pre>';
-print_r($request->getElement($linkpdo, 'chuckn_facts',5));
-echo '</pre>';
-*/
 
 
 
