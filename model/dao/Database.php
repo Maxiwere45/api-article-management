@@ -5,6 +5,10 @@ namespace model\dao;
 use Exception;
 use PDO;
 
+/**
+ * Class Singleton Database
+ * @package model\dao
+ */
 class Database
 {
     private static $instance = null;

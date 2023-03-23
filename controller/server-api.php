@@ -4,7 +4,7 @@ require_once(__DIR__ . "/../model/dao/requests/ArticleRequest.php");
 require_once(__DIR__ . "/../model/dao/requests/UserRequest.php");
 require_once(__DIR__ . "/../model/dao/requests/MOPRequest.php");
 require_once(__DIR__ . "/../model/dao/requests/ReactionRequest.php");
-require_once (__DIR__ . "/../libs/functions_utils.php");
+require_once (__DIR__ . "/../libs/functions-utils.php");
 require_once(__DIR__ . "/../model/Article.php");
 // Identification du type de méthode HTTP envoyée par le client
 use model\Article;
@@ -17,10 +17,11 @@ use function libs\deliverResponse;
 use function libs\getJWTUser;
 
 // Initialisation du fichier de log
-ini_set("error_log", "../../logs/journal.log");
+//ini_set("error_log", "..\logs\journal.log");
 
 $http_method = $_SERVER['REQUEST_METHOD'];
 $articleRequest = new ArticleRequest();
+$reactionRequest = new ReactionRequest();
 $userRequest = new UserRequest();
 $moderatorRequest = new MOPRequest();
 
@@ -108,7 +109,6 @@ switch ($http_method) {
                         $res = $articleRequest->insertArticle($article);
                         // Envoi de la réponse au Client
                         deliverResponse(201, "L'article a bien ete ajoutee", $data);
-                        error_log("INFO 201 : L'article a bien ete ajoutee");
                         break;
                     // Liker d'un article
                     case "like":
@@ -116,10 +116,13 @@ switch ($http_method) {
                             die("ERROR 403 : Vous n'avez pas les droits pour acceder a cette ressource !");
                         }
                         if (isset($data['id_article'])) {
-                            $res = $articleRequest->likeArticle($data['id_article'], $user);
+                            $article = $articleRequest->getArticle($data['id_article']);
+                            $res = $reactionRequest->likerArticle($article, $user);
+                            if (!$res) {
+                                die("Vous avez deja like cet article !");
+                            }
                             // Envoi de la réponse au Client
                             deliverResponse(201, "Le like a bien ete ajoutee", $data);
-                            error_log("INFO 201 : Le like a bien ete ajoutee");
                         } else {
                             die("ERROR 404 : L'ID de l'article n'est pas valide !");
                         }
@@ -130,10 +133,10 @@ switch ($http_method) {
                             die("ERROR 403 : Vous n'avez pas les droits pour acceder a cette ressource !");
                         }
                         if (isset($data['id_article'])) {
-                            $res = $articleRequest->dislikeArticle($data['id_article'], $user);
+                            $article = $articleRequest->getArticle($data['id_article']);
+                            $res = $reactionRequest->dislikerArticle($article, $user);
                             // Envoi de la réponse au Client
                             deliverResponse(201, "Le dislike a bien ete ajoutee", $data);
-                            error_log("INFO 201 : Le dislike a bien ete ajoutee");
                         } else {
                             die("ERROR 404 : L'ID de l'article n'est pas valide !");
                         }
@@ -148,7 +151,6 @@ switch ($http_method) {
                             $res = $userRequest->insertUser($user);
                             // Envoi de la réponse au Client
                             deliverResponse(201, "L'utilisateur a bien ete ajoutee", $data);
-                            error_log("INFO 201 : L'utilisateur a bien ete ajoutee");
                         } else {
                             die("ERROR 404 : L'utilisateur n'est pas valide !");
                         }
@@ -186,7 +188,6 @@ switch ($http_method) {
                         if ($user->isPublisher() && Article::isOwner($user, $article)) {
                             $res = $articleRequest->updateArticle($data, $user);
                             deliverResponse(200, "L'article a ete modifie !", $data);
-                            error_log("INFO 200 : L'article a ete modifie !");
                         } else {
                             deliverResponse(403, "Vous n'êtes pas autorisé à accéder à cette fonction", null);
                         }
@@ -195,27 +196,6 @@ switch ($http_method) {
                         if ($user->isModerator()) {
                             $res = $userRequest->updateUser($data);
                             deliverResponse(200, "L'utilisateur a ete modifie !", $data);
-                            error_log("INFO 200 : L'utilisateur a ete modifie !");
-                        } else {
-                            deliverResponse(403, "Vous n'êtes pas autorisé à accéder à cette fonction", null);
-                        }
-                        break;
-                    case "unlike":
-                        if ($user->isPublisher()) {
-                            $article = $articleRequest->getArticle($data['id']);
-                            $res = $reactionRequest->unlikerArticle($article, $user);
-                            deliverResponse(200, "Le like a ete retire !", $data);
-                            error_log("INFO 200 : Le like a ete retire !");
-                        } else {
-                            deliverResponse(403, "Vous n'êtes pas autorisé à accéder à cette fonction", null);
-                        }
-                        break;
-                    case "undislike":
-                        if ($user->isPublisher()) {
-                            $article = $articleRequest->getArticle($data['id']);
-                            $res = $reactionRequest->undislikerArticle($article, $user);
-                            deliverResponse(200, "Le dislike a ete retire !", $data);
-                            error_log("INFO 200 : Le dislike a ete retire !");
                         } else {
                             deliverResponse(403, "Vous n'êtes pas autorisé à accéder à cette fonction", null);
                         }
@@ -251,9 +231,11 @@ switch ($http_method) {
                         $article = $articleRequest->getArticle($data['article_id']);
                         // Si l'utilisateur est un moderateur ou qu'il est propriétaire de l'article
                         if ($user->isModerator() || Article::isOwner($user, $article)) {
-                            $res = $articleRequest->deleteArticle($article, $user);
+                            $res = $articleRequest->deleteArticle($article);
+                            if (!$res) {
+                                die("L'article n'a pas pu être supprimé !");
+                            }
                             deliverResponse(200, "L'article a bien été supprimé", null);
-                            error_log("INFO 200 : L'article a bien été supprimé");
                         } else {
                             deliverResponse(403, "Vous n'êtes pas autorisé à accéder à cette fonction", null);
                         }
@@ -264,7 +246,6 @@ switch ($http_method) {
                             $article = $articleRequest->getArticle($data['id']);
                             $res = $reactionRequest->unlikerArticle($article, $user);
                             deliverResponse(200, "Le like a ete retire !", $data);
-                            error_log("INFO 200 : Le like a ete retire !");
                         } else {
                             deliverResponse(403, "Vous n'êtes pas autorisé à accéder à cette fonction", null);
                         }
@@ -275,7 +256,6 @@ switch ($http_method) {
                             $article = $articleRequest->getArticle($data['id']);
                             $res = $reactionRequest->undislikerArticle($article, $user);
                             deliverResponse(200, "Le dislike a ete retire !", $data);
-                            error_log("INFO 200 : Le dislike a ete retire !");
                         } else {
                             deliverResponse(403, "Vous n'êtes pas autorisé à accéder à cette fonction", null);
                         }
@@ -284,7 +264,6 @@ switch ($http_method) {
                         if ($user->isModerator()) {
                             $res = $userRequest->deleteUser($data['user_id']);
                             deliverResponse(200, "L'utilisateur a bien été supprimé", null);
-                            error_log("INFO 200 : L'utilisateur a bien été supprimé");
                         } else {
                             deliverResponse(403, "Vous n'êtes pas autorisé à accéder à cette fonction", null);
                         }
@@ -297,11 +276,10 @@ switch ($http_method) {
                 deliverResponse(404, "Commande inconnue !", null);
             }
         } else {
-            deliverResponse(403, "Vous n'êtes pas autorisé à accéder à cette fonction ou elle n'existe pas", null);
+            deliverResponse(403, "Vous n'êtes pas autorisé à accéder à cette fonction", null);
         }
         break;
     default:
         deliverResponse(400, "Methode non autorisee ou inconnue !", null);
-        error_log("ERROR 400 : Methode non autorisee ou inconnue !");
         break;
 }

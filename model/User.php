@@ -25,7 +25,7 @@ class User
     }
 
     /**
-     * Cette fonction permet de créer un objet User à partir d'un tableau
+     * Cette fonction renvoie le login de l'utilisateur
      * @return string
      */
     public function getLogin(): string

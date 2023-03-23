@@ -8,7 +8,7 @@ use model\Article;
 use model\dao\Database;
 use PDO;
 
-/*
+/**
  * Cette classe contient toutes les requêtes SQL pour les modérateurs
  */
 class MOPRequest
@@ -20,7 +20,7 @@ class MOPRequest
         $this->linkpdo = Database::getInstance('root', "9wms351v")->getConnection();
     }
 
-    /*
+    /**
      * Cette fonction retourne le nombre de modérateurs
      * @return int
      */
@@ -33,7 +33,7 @@ class MOPRequest
         return $data[0];
     }
 
-    /*
+    /**
      * Cette fonction retourne le nombre de rédacteurs
      * @return int
      */
@@ -46,7 +46,7 @@ class MOPRequest
         return $data[0];
     }
 
-    /*
+    /**
      * Cette fonction retourne le nombre d'utilisateurs
      * @return int
      */
@@ -59,7 +59,7 @@ class MOPRequest
         return $data[0];
     }
 
-    /*
+    /**
      * Cette fonction retourne le nombre de likes d'un article
      * @return int
      */
@@ -73,7 +73,7 @@ class MOPRequest
     }
 
 
-    /*
+    /**
      * Cette fonction retourne le nombre de dislikes d'un article
      * @return int
      */
@@ -86,26 +86,29 @@ class MOPRequest
         return $data[0];
     }
 
-    /*
+    /**
      * Cette fonction retourne les utilisateurs qui ont liké un article
      * @param Article $article
      * @return array
      */
-    public function getUsersWhoLiked(Article $article)
+    public function getUsersWhoLiked(Article $article): array
     {
-        $sql = "SELECT * FROM likes WHERE article_id = :id";
+        $sql = "SELECT id_username FROM likes WHERE article_id = :id";
         $stmt = $this->linkpdo->prepare($sql);
         $stmt->execute(array(':id' => $article->getId()));
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getUsersWhoDisliked(Article $article)
+    /**
+     * Cette fonction retourne les utilisateurs qui ont disliké un article
+     * @param Article $article
+     * @return array
+     */
+    public function getUsersWhoDisliked(Article $article): array
     {
-        $sql = "SELECT * FROM dislikes WHERE article_id = :id";
+        $sql = "SELECT id_username FROM dislikes WHERE article_id = :id";
         $stmt = $this->linkpdo->prepare($sql);
         $stmt->execute(array(':id' => $article->getId()));
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
-
 }

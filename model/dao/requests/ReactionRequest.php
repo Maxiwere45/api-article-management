@@ -39,29 +39,17 @@ class ReactionRequest
      */
     public function likerArticle(Article $article, User $user): bool
     {
-        // Verifier si l'utilisateur a deja like ou dislike l'article
-        $sql = "SELECT * FROM likes WHERE article_id = :article_id AND id_username = :id_username";
-        $stmt = $this->linkpdo->prepare($sql);
-        $stmt->execute(array(
-            ':article_id' => $article->getId(),
-            ':id_username' => $user->getLogin()
-        ));
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($data) {
+        if (Article::isOwner($user, $article)) {
+            die("ERROR 403 : Vous ne pouvez pas liker votre propre article !");
+        }
+        // Verifier si l'utilisateur a deja like l'article
+        if ($this->alreadyLiked($article, $user)) {
             die("ERROR 400 : Vous avez deja like cet article !");
         }
-        $sql = "SELECT * FROM dislikes WHERE article_id = :article_id AND id_username = :id_username";
-        $stmt = $this->linkpdo->prepare($sql);
-        $stmt->execute(array(
-            ':article_id' => $article->getId(),
-            ':id_username' => $user->getLogin()
-        ));
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($data) {
-            // Supprimer le dislike
+        // Verifier si l'utilisateur a deja dislike l'article
+        if ($this->alreadyDisliked($article, $user)) {
             $this->undislikerArticle($article, $user);
         }
-
         // Ajouter le like
         $sql = "INSERT INTO likes(article_id,id_username)
             VALUES(:article_id,:id_username)";
@@ -76,7 +64,7 @@ class ReactionRequest
      * Permet de disliker un article
      *
      * **Attention** :
-     * * si l'utilisateur a deja liké l'article, le like sera supprimé
+     * * Si l'utilisateur a deja liké l'article, le like sera supprimé
      * * L'auteur de l'article ne peut pas disliker son propre article
      *
      * @param Article $article L'article à disliker
@@ -85,32 +73,17 @@ class ReactionRequest
      */
     public function dislikerArticle(Article $article, User $user): bool
     {
-        // Verifier si l'utilisateur a deja like ou dislike l'article
-        $sql = "SELECT * FROM dislikes WHERE article_id = :article_id AND id_username = :id_username";
-        $stmt = $this->linkpdo->prepare($sql);
-        $stmt->execute(array(
-            ':article_id' => $article->getId(),
-            ':id_username' => $user->getLogin()
-        ));
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($data) {
-            die("ERROR 403 : Vous avez deja dislike cet article !");
-        }
-        $sql = "SELECT * FROM likes WHERE article_id = :article_id AND id_username = :id_username";
-        $stmt = $this->linkpdo->prepare($sql);
-        $stmt->execute(array(
-            ':article_id' => $article->getId(),
-            ':id_username' => $user->getLogin()
-        ));
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($data) {
-            // Supprimer le like
-            $this->unlikerArticle($article, $user);
+        // Verifier si l'utilisateur est l'auteur de l'article
+        if (Article::isOwner($user, $article)) {
+            die("ERROR 403 : Vous ne pouvez pas disliker votre propre article !");
         }
 
-        // Verifier si l'utilisateur est l'auteur de l'article
-        if ($article->getAuthor()->getLogin() == $user->getLogin()) {
-            die("ERROR 403 : Vous ne pouvez pas disliker votre propre article !");
+        // Verifier si l'utilisateur a deja like ou dislike l'article
+        if ($this->alreadyLiked($article, $user)) {
+            $this->unlikerArticle($article, $user);
+        }
+        if ($this->alreadyDisliked($article, $user)) {
+            die("ERROR 403 : Vous avez deja dislike cet article !");
         }
 
         // Ajouter le dislike
@@ -124,8 +97,7 @@ class ReactionRequest
     }
 
     /**
-     * Permet de supprimer un like
-     *
+     * Supprime un like
      * @param Article $article L'article dont on veut supprimer le like
      * @param User $user L'utilisateur qui a liké l'article
      * @return bool true si le like a été supprimé, false sinon
@@ -173,10 +145,10 @@ class ReactionRequest
             ':id_username' => $user->getLogin()
         ));
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        if (!$data) {
-            return false;
+        if ($data) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**
@@ -195,9 +167,9 @@ class ReactionRequest
             ':id_username' => $user->getLogin()
         ));
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        if (!$data) {
-            return false;
+        if ($data) {
+            return true;
         }
-        return true;
+        return false;
     }
 }
