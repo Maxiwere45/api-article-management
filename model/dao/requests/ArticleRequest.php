@@ -97,7 +97,7 @@ class ArticleRequest
         }
         $sql = rtrim($sql, ", ");
         $sql .= " WHERE article_id = ?";
-        $params[] = $values['id'];
+        $params[] = $values['article_id'];
         $stmt = $this->linkpdo->prepare($sql);
 
         return $stmt->execute($params);
@@ -128,6 +128,59 @@ class ArticleRequest
 
         // Retourne true si les 3 requêtes ont été exécutées
         return $res1 && $res2 && $res3;
+    }
+
+    //-----LIKE / DISLIKE-----//
+
+    /**
+     * Permet de liker un article
+     * @param string $articleID
+     * @param User $user
+     * @return bool
+     */
+    public function likeArticle(string $articleID, User $user): bool
+    {
+        $sql = "INSERT INTO likes(article_id, id_username) VALUES(:article_id, :user_id)";
+        $stmt = $this->linkpdo->prepare($sql);
+        return $stmt->execute(array(
+            ':article_id' => $articleID,
+            ':user_id' => $user->getLogin()
+        ));
+    }
+
+    /**
+     * Permet de disliker un article
+     * @param string $articleID
+     * @param User $user
+     * @return bool
+     */
+    public function dislikeArticle(string $articleID, User $user): bool
+    {
+        // Verification si l'utilisateur a déjà liké l'article
+        $sql = "SELECT * FROM likes WHERE article_id = :article_id AND id_username = :user_id";
+        $stmt = $this->linkpdo->prepare($sql);
+        $stmt->execute(array(
+            ':article_id' => $articleID,
+            ':user_id' => $user->getLogin()
+        ));
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($data) {
+            // Suppression du like
+            $sql = "DELETE FROM likes WHERE article_id = :article_id AND id_username = :user_id";
+            $stmt = $this->linkpdo->prepare($sql);
+            $stmt->execute(array(
+                ':article_id' => $articleID,
+                ':user_id' => $user->getLogin()
+            ));
+        }
+
+        // Ajout du dislike
+        $sql = "INSERT INTO dislikes(article_id, id_username) VALUES(:article_id, :user_id)";
+        $stmt = $this->linkpdo->prepare($sql);
+        return $stmt->execute(array(
+            ':article_id' => $articleID,
+            ':user_id' => $user->getLogin()
+        ));
     }
 
 }

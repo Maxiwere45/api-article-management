@@ -5,12 +5,12 @@ require_once(__DIR__ . "/../model/dao/requests/UserRequest.php");
 require_once(__DIR__ . "/../model/User.php");
 require_once __DIR__ . "/../libs/functions_utils.php";
 require_once(__DIR__ . "/../libs/jwt-utils.php");
+require_once '../libs/jwt-utils.php';
 use model\dao\requests\UserRequest;
 use function libs\deliverResponse;
 use function libs\isValidUser;
 
-require_once '../libs/jwt-utils.php';
-
+ini_set("error_log", "../../logs/journal.log");
 // Paramétrage de l'entête HTTP (pour la réponse au Client)
 header("Content-Type:application/json");
 
@@ -34,6 +34,7 @@ if ($http_method == 'POST') {
         );
         $jwt = generate_jwt($headers, $payload);
         deliverResponse(200, "Vous êtes connecté en tant que ".$username->getLogin()." avec le role ".$username->getRole()." ", $jwt);
+        error_log("Connexion de l'utilisateur ".$username->getLogin()." avec le role ".$username->getRole()." ");
     } else {
         deliverResponse(401, "Login ou mot de passe incorrect veuillez reessayer de nouveau !", null);
     }

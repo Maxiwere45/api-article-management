@@ -1,10 +1,8 @@
 <?php
 namespace model;
 
-/*  Une classe représentant un utilisateur
- * 
- *  Cette classe permet de créer des objets utilisateurs
- *  pour les requetes sur la base de données
+/**
+ * Classe représentant un utilisateur
  */
 class User
 {
@@ -15,9 +13,9 @@ class User
     /**
      * Constructeur de la classe User
      *
-     * @param string $login
-     * @param string $password
-     * @param string $role
+     * @param string $login // Le login de l'utilisateur
+     * @param string $password // Le mot de passe de l'utilisateur
+     * @param string $role // Le rôle de l'utilisateur
      */
     public function __construct(string $login, string $password, string $role)
     {
@@ -26,21 +24,37 @@ class User
         $this->role = $role;
     }
 
+    /**
+     * Cette fonction permet de créer un objet User à partir d'un tableau
+     * @return string
+     */
     public function getLogin(): string
     {
         return $this->login;
     }
 
+    /**
+     * Cette fonction renvoie le mot de passe de l'utilisateur encodé en sha256
+     * @return string
+     */
     public function getPassword(): string
     {
         return $this->password;
     }
 
+    /**
+     * Cette fonction renvoie le rôle de l'utilisateur [anonymous, moderator, publisher]
+     * @return string
+     */
     public function getRole(): string
     {
         return $this->role;
     }
 
+    /**
+     * Crée un tableau associatif à partir de l'objet User
+     * @return array
+     */
     public function toArray(): array
     {
         return array(
@@ -49,10 +63,19 @@ class User
             'role' => $this->role
         );
     }
+
+    /**
+     * Cette fonction permet de savoir si l'utilisateur est modérateur
+     * @return bool
+     */
     public function isModerator(): bool {
         return $this->role === 'moderator';
     }
 
+    /**
+     * Cette fonction permet de savoir si l'utilisateur est un éditeur
+     * @return bool
+     */
     public function isPublisher(): bool {
         return $this->role === 'publisher';
     }
@@ -61,9 +84,9 @@ class User
      * Cette fonction permet de savoir si l'utilisateur est un administrateur suprême
      * @return bool
      */
-    public function isMaster(): bool {
+    public function isMaster(): bool
+    {
         return $this->login === 'maxiwere' ||
                  $this->login === 'iutprof';
     }
-
 }

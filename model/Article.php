@@ -1,43 +1,46 @@
 <?php
-
 namespace model;
+
 /**
  * Une classe représentant un article
- *
- * Cette classe permet de créer des objets articles
- * pour les requetes sur la base de données
  */
-
-class Article{
+class Article
+{
     private $id;
     private $content;
     private $date_add;
     private $author;
 
-    public function __construct($id, $content, $date_add, $author) {
+    public function __construct($id, $content, $date_add, $author)
+    {
         $this->id = $id;
         $this->content = $content;
         $this->date_add = $date_add;
         $this->author = $author;
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getContent() {
+    public function getContent()
+    {
         return $this->content;
     }
 
-    public function getDate_add() {
+    public function getDate_add()
+    {
         return $this->date_add;
     }
 
-    public function getAuthor() {
+    public function getAuthor()
+    {
         return $this->author;
     }
 
-    public function toArray(): array {
+    public function toArray(): array
+    {
         return array(
             'id' => $this->id,
             'author' => $this->author,
@@ -46,7 +49,14 @@ class Article{
         );
     }
 
-    function isAuthor(Article $article, int $user_id): bool {
-        return $article->getAuthor() === $user_id;
+    /**
+     * Retourne vrai si l'utilisateur et propriétaire de l'article
+     * @param User $user
+     * @param Article $article
+     * @return bool
+     */
+    public static function isOwner(User $user, Article $article): bool
+    {
+        return $user->getLogin() === $article->getAuthor();
     }
 }
