@@ -43,7 +43,7 @@ Il existe 3 fonctions principales :
 
 * **Modèle conceptuel de données** :
 
-<img  style="float:center; margin: 0 10px 0;" alt="" src="./ressources/MCD_IMAGE.png" width=120>
+<img  style="float:center; margin: 0 10px 0;" alt="" src="./ressources/MCD_IMAGE.png" width=320>
 
 
 ## Gestions des erreurs
