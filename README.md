@@ -45,6 +45,10 @@ Il existe 3 fonctions principales :
 
 <img  style="float:center; margin: 0 10px 0;" alt="" src="./ressources/MCD_IMAGE.png" width=380>
 
+* **Modèle physique de données** :
+
+<img  style="float:center; margin: 0 10px 0;" alt="" src="./ressources/BDD_DIAGRAM.png" width=380>
+
 
 ## Gestions des erreurs
 
