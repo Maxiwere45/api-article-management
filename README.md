@@ -49,17 +49,127 @@ Il existe 3 fonctions principales :
 
 ## TESTS
 
+* **GET** `/articles` (all roles) : Récupère la liste des articles
+````json
+{
+    "status": 200,
+    "status_message": "All articles",
+    "data": [
+        {
+            "author": "fujitoo",
+            "content": "La conquête de la lune.",
+            "date_de_publication": "2023-03-18"
+        },
+      "and more..."
+    ]
+}
+````
+
+**GET** `/articles/id=LAS428` (anonymous) : Récupère un article
+````json
+{
+  "status": 200,
+  "status_message": "[anonymous] L'article a ete recupere avec succes",
+  "data": {
+    "id": "LAS428",
+    "author": "bonbily",
+    "content": "Le monde d'hier.",
+    "date_add": "2023-03-19"
+  }
+}
+````
+    
+* **GET** `/articles/id=LAS428` (publisher) :
+````json
+{
+    "status": 200,
+    "status_message": "[yahyanft] L'article a ete recupere avec succes",
+    "data": {
+        "id": "LAS428",
+        "author": "bonbily",
+        "content": "Le monde d'hier.",
+        "date_add": "2023-03-19",
+        "likes_count": 1,
+        "dislikes_count": 0
+    }
+}
+````
+
+* **GET** `/articles/id=LAS428` (moderator) :*
+````json
+{
+    "status": 200,
+    "status_message": "[iutprof] L'article a ete recupere avec succes",
+    "data": {
+        "id": "LAS428",
+        "author": "bonbily",
+        "content": "Le monde d'hier.",
+        "date_add": "2023-03-19",
+        "likes_count": 1,
+        "users_who_liked": [
+            {
+                "id_username": "yahyanft"
+            }
+        ],
+        "dislikes_count": 0,
+        "users_who_disliked": []
+    }
+}
+````
+
+* **POST** `/articles` : *Créer - like - dislike* un article - créer un utilisateur
+````json
+{
+    "status": 200,
+    "status_message": "L'article a ete cree avec succes",
+    "data": {
+        "id": "LAS428",
+        "author": "bonbily",
+        "content": "Le monde d'hier.",
+        "date_add": "2023-03-19"
+    }
+}
+````
+
+* **PUT** `/articles/{id}` : Modifier un article/user 
+````json
+{
+    "status": 200,
+    "status_message": "L'article a ete modifie avec succes",
+    "data": {
+        "id": "LAS428",
+        "author": "bonbily",
+        "content": "Le monde d'hier.",
+        "date_add": "2023-03-19"
+    }
+}
+````
+
+* **DELETE** `/articles/{id}` : Supprimer un article - retirer like/dislike sur un article
+````json
+{
+    "status": 200,
+    "status_message": "L'article a ete supprime avec succes",
+    "data": {
+        "id": "LAS428",
+        "author": "bonbily",
+        "content": "Le monde d'hier.",
+        "date_add": "2023-03-19"
+    }
+}
+````
 
 ## Informations complémentaires
 
 * Architecture de l'application :
   * **Modèle MVC** : Modèle, Vue, Contrôleur
   * **DAO** : Data Access Object
-  * **Frontend** : HTML, CSS, JS
-  * **Backend** : PHP, MySQL
-  * **API** : REST
-  * **Authentification** : JSON Web Token (JWT)
-  * **Sécurité** : XSS, CSRF, SQL Injection
+  * **Frontend** : `HTML`, `CSS`, `JS`
+  * **Backend** : `PHP`, `MySQL`
+  * **API** : `REST`
+  * **Authentification** : JSON Web Token `JWT`
+  * **Sécurité** : `XSS`, `CSRF`, `SQL Injection`
+
 
 * **Modèle conceptuel de données** :
 
