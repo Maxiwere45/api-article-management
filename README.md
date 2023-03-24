@@ -47,6 +47,9 @@ Il existe 3 fonctions principales :
 * `403` : Accès refusé
 * `404` : Donnée non trouvée
 
+## TESTS
+
+
 ## Informations complémentaires
 
 * Architecture de l'application :
@@ -72,7 +75,7 @@ Il existe 3 fonctions principales :
 <img  style="float:center; margin: 0 10px 0;" alt="" src="./ressources/logo_iut_info.png" width=120>
 
 Ce programme a été réalisé par des étudiants de l'**IUT informatique de Toulouse** dans le cadre d'un mini projet de groupe en programmation PHP. 
-Pour en savoir un peu plus, vous pouvez contacter les développeurs du programme
+Pour en savoir un peu plus, vous pouvez contacter les développeurs de l'API
 * [**Amdjad Anrifou**](https://github.com/maxiwere45)
 * [**Carl Premi**](https://github.com/otsubyo)
 
