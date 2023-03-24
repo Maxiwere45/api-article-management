@@ -28,7 +28,7 @@ Pour en savoir un peu plus, vous pouvez contacter les développeurs du programme
 * [**Amdjad Anrifou**](https://github.com/maxiwere45)
 * [**Carl Premi**](https://github.com/otsubyo)
 
-* Professeurs de la ressource :
+### Professeurs de la ressource :
   * Micheau Paul
   * Choquet Mathias
   * Broisin Julien
