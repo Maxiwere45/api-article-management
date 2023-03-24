@@ -50,7 +50,7 @@ class Article
     }
 
     /**
-     * Retourne vrai si l'utilisateur et propriétaire de l'article
+     * Retourne vrai si l'utilisateur est propriétaire de l'article
      * @param User $user
      * @param Article $article
      * @return bool
