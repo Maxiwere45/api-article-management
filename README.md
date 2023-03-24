@@ -41,6 +41,15 @@ Il existe 3 fonctions principales :
 
 ## Informations complémentaires
 
+* Architecture de l'application :
+  * **Modèle MVC** : Modèle, Vue, Contrôleur
+  * **DAO** : Data Access Object
+  * **Frontend** : HTML, CSS, JS
+  * **Backend** : PHP, MySQL
+  * **API** : REST
+  * **Authentification** : JSON Web Token (JWT)
+  * **Sécurité** : XSS, CSRF, SQL Injection
+
 * **Modèle conceptuel de données** :
 
 <img  style="float:center; margin: 0 10px 0;" alt="" src="./ressources/MCD_IMAGE.png" width=380>
