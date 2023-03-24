@@ -39,6 +39,14 @@ Il existe 3 fonctions principales :
 * **Anonyme** :
     * Peut consulter les articles
 
+## Gestions des erreurs
+
+* `200` : Succès de la requête
+* `400` : Commande invalide
+* `401` : Utilisateur non authentifié
+* `403` : Accès refusé
+* `404` : Donnée non trouvée
+
 ## Informations complémentaires
 
 * Architecture de l'application :
@@ -57,16 +65,6 @@ Il existe 3 fonctions principales :
 * **Modèle physique de données** :
 
 <img  style="float:center; margin: 0 10px 0;" alt="" src="./ressources/BDD_DIAGRAM.png" width=380>
-
-
-## Gestions des erreurs
-
-* `200` : Succès de la requête
-* `400` : Commande invalide
-* `401` : Utilisateur non authentifié
-* `403` : Accès refusé
-* `404` : Donnée non trouvée
-
 
 
 # Crédits
