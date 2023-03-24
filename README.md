@@ -1,7 +1,5 @@
 # ARTICLE MANAGER
 
----
-
 ## Description
 ARTICLE MANAGER une solution pour la gestion d’articles de blogs. Cette solution est orientée ressources, c’est-à-dire sur une API REST.
 
@@ -25,12 +23,12 @@ Il existe 3 fonctions principales :
 
 <img  style="float:center; margin: 0 10px 0;" alt="" src="./ressources/logo_iut_info.png" width=120>
 
-Ce programme a été réalisé par des étudiants de l'**IUT informatique de Toulouse** dans le cadre d'un mini projet de groupe en programmation C. Pour en savoir un peu plus, vous pouvez contactez les développeurs du programme
+Ce programme a été réalisé par des étudiants de l'**IUT informatique de Toulouse** dans le cadre d'un mini projet de groupe en programmation PHP. 
+Pour en savoir un peu plus, vous pouvez contacter les développeurs du programme
 * [**Amdjad Anrifou**](https://github.com/maxiwere45)
 * [**Carl Premi**](https://github.com/otsubyo)
 
-
-Professeurs de la ressource :
-Micheau Paul
-Choquet Mathias
-Broisin Julien
+* Professeurs de la ressource :
+  * Micheau Paul
+  * Choquet Mathias
+  * Broisin Julien
