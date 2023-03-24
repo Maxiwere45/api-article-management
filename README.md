@@ -95,7 +95,7 @@ Il existe 3 fonctions principales :
 }
 ````
 
-* **GET** `/articles/id=LAS428` (moderator) :*
+* **GET** `/articles/id=LAS428` (moderator) :
 ````json
 {
     "status": 200,
@@ -161,7 +161,7 @@ Il existe 3 fonctions principales :
 
 ## Informations complémentaires
 
-* Architecture de l'application :
+* Architecture de l'API :
   * **Modèle MVC** : Modèle, Vue, Contrôleur
   * **DAO** : Data Access Object
   * **Frontend** : `HTML`, `CSS`, `JS`
