@@ -22,7 +22,11 @@ Il existe 3 fonctions principales :
 ## Restrictions d'accès
 
 * **Publisher** : 
-  * Peut consulter les articles
+  * Peut consulter les articles avec les informations suivantes :
+    * auteur
+    * contenu
+    * date de publication
+    * nombre de likes/dislikes
   * Peut créer un article
   * Peut modifier/supprimer un article lui appartenant
   * Peut liker/disliker un article autre que le sien
@@ -37,7 +41,10 @@ Il existe 3 fonctions principales :
     * nombre de dislikes
     * utilisateurs ayant liké/disliké l'article
 * **Anonyme** :
-    * Peut consulter les articles
+    * Peut consulter les articles avec les informations suivantes :
+      * auteur
+      * contenu
+      * date de publication
 
 ## Gestions des erreurs
 
