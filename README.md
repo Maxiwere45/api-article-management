@@ -1,5 +1,7 @@
 # ARTICLE MANAGER
 
+<img  style="float:center; margin: 0 10px 0;" alt="" src="./ressources/logo_article_manager.png" width=380>
+
 ## Description
 ARTICLE MANAGER une solution pour la gestion d’articles de blogs. Cette solution est orientée ressources, c’est-à-dire sur une API REST.
 
