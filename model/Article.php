@@ -39,6 +39,10 @@ class Article
         return $this->author;
     }
 
+    /**
+     * Retourne un tableau associatif contenant les données de l'article
+     * @return array
+     */
     public function toArray(): array
     {
         return array(

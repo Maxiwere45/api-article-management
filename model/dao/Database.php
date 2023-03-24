@@ -17,7 +17,7 @@ class Database
     private function __construct($login, $password)
     {
         try {
-            if (php_uname('n') == "MAXIWERE-IUT"){
+            if (php_uname('n') == "MAXIWERE-IUT") {
                 $this->connection = new PDO("mysql:host=localhost;dbname=api-article-db;charset=UTF8", $login, $this->decoder($password, "thou"));
             } else {
                 $this->connection = new PDO("mysql:host=localhost;dbname=api-articles-db;charset=UTF8", $login, $this->decoder($password, "thou"));
@@ -27,6 +27,12 @@ class Database
         }
     }
 
+    /**
+     * Retourne l'instance de la classe
+     * @param $login
+     * @param $password
+     * @return Database|null
+     */
     public static function getInstance($login, $password): ?Database
     {
         if (!self::$instance) {
@@ -35,6 +41,10 @@ class Database
         return self::$instance;
     }
 
+    /**
+     * Retourne la connexion à la base de données
+     * @return PDO
+     */
     public function getConnection(): PDO
     {
         return $this->connection;
@@ -90,10 +100,3 @@ class Database
         return $ciphertext;
     }
 }
-
-// Utilisation de la classe Singleton
-/*
-$login = 'root';
-$db = Database::getInstance($login, "9wms351v");
-$connection = $db->getConnection();
-*/

@@ -9,7 +9,9 @@ use model\dao\Database;
 use PDO;
 
 /**
- * Cette classe contient toutes les requêtes SQL pour les modérateurs
+ * Cette classe permet de récupérer des informations sur les utilisateurs, les articles, les likes et les dislikes
+ * Class MOPRequest
+ * @package model\dao\requests
  */
 class MOPRequest
 {
@@ -61,6 +63,7 @@ class MOPRequest
 
     /**
      * Cette fonction retourne le nombre de likes d'un article
+     * @param Article $article
      * @return int
      */
     public function getNbLikesFromArticle(Article $article): int
@@ -75,6 +78,7 @@ class MOPRequest
 
     /**
      * Cette fonction retourne le nombre de dislikes d'un article
+     * @param Article $article
      * @return int
      */
     public function getNbDislikesFromArticle(Article $article): int

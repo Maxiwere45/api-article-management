@@ -1,13 +1,11 @@
 <?php
 
-function generate_jwt($headers, $payload, $secret = 'crococarl'): string {
+function generate_jwt($headers, $payload, $secret = 'crococarl'): string
+{
     $headers_encoded = base64url_encode(json_encode($headers));
-
     $payload_encoded = base64url_encode(json_encode($payload));
-
     $signature = hash_hmac('SHA256', "$headers_encoded.$payload_encoded", $secret, true);
     $signature_encoded = base64url_encode($signature);
-
     return "$headers_encoded.$payload_encoded.$signature_encoded";
 }
 
@@ -35,11 +33,13 @@ function is_jwt_valid($jwt, $secret='crococarl'): bool
     return !($is_token_expired || !$is_signature_valid);
 }
 
-function base64url_encode($data): string {
+function base64url_encode($data): string
+{
     return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
 }
 
-function get_authorization_header(): ?string {
+function get_authorization_header(): ?string
+{
     $headers = null;
 
     if (isset($_SERVER['Authorization'])) {
@@ -58,7 +58,8 @@ function get_authorization_header(): ?string {
     return $headers;
 }
 
-function get_bearer_token(): ?string {
+function get_bearer_token(): ?string
+{
     $headers = get_authorization_header();
     // HEADER: Get the access token from the header
     if (!empty($headers) && preg_match('/Bearer\s(\S+)/', $headers, $matches)) {
@@ -70,17 +71,10 @@ function get_bearer_token(): ?string {
 /**
  * @throws Exception
  */
-function decode_jwt($jwt, $secret = 'crococarl') {
+function decode_jwt($jwt)
+{
     $token_parts = explode('.', $jwt);
     $payload = base64_decode($token_parts[1]);
-    /* Cause des erreurs de signature
-    $header = base64_decode($token_parts[0]);
-    $signature = base64_decode($token_parts[2]);
-    $expected_signature = hash_hmac('sha256', "$token_parts[0].$token_parts[1]", $secret, true);
-    if ($signature !== $expected_signature) {
-        throw new Exception('Invalid signature');
-    }
-    */
     $decoded_payload = json_decode($payload, true);
 
     if (!$decoded_payload) {

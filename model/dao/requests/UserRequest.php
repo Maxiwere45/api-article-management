@@ -9,9 +9,6 @@ use PDO;
 
 /**
  * Une classe représentant une requete sur les utilisateurs
- *
- * Cette classe permet de faire des requetes sur les utilisateurs
- * dans la base de données
  */
 class UserRequest
 {

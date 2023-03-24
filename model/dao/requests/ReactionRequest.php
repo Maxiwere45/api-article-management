@@ -9,9 +9,7 @@ use PDO;
 
 /**
  * Une classe représentant une requete sur les reactions
- *
- * Cette classe permet de faire des requetes sur les reactions (likes et dislikes)
- * des articles dans la base de données
+ * des articles
  */
 class ReactionRequest
 {
@@ -97,7 +95,7 @@ class ReactionRequest
     }
 
     /**
-     * Supprime un like
+     * Supprime un like de l'article
      * @param Article $article L'article dont on veut supprimer le like
      * @param User $user L'utilisateur qui a liké l'article
      * @return bool true si le like a été supprimé, false sinon
@@ -113,10 +111,10 @@ class ReactionRequest
     }
 
     /**
-     * Permet de supprimer un dislike
+     * Supprime un dislike de l'article
      *
      * @param Article $article L'article dont on veut supprimer le dislike
-     * @param User $user L'utilisateur qui a disliké l'article
+     * @param User $user L'utilisateur qui a dislike l'article
      * @return bool true si le dislike a été supprimé, false sinon
      */
     public function undislikerArticle(Article $article, User $user): bool
@@ -130,10 +128,10 @@ class ReactionRequest
     }
 
     /**
-     * Permet de savoir si un utilisateur a deja like un article
+     * Vérifie si l'utilisateur a deja like un article
      *
      * @param Article $article L'article dont on veut savoir si l'utilisateur l'a deja like
-     * @param User $user L'utilisateur dont on veut savoir si il a deja like l'article
+     * @param User $user L'utilisateur dont on veut savoir s'il a deja like l'article
      * @return bool true si l'utilisateur a deja like l'article, false sinon
      */
     public function alreadyLiked(Article $article, User $user): bool
@@ -144,18 +142,17 @@ class ReactionRequest
             ':article_id' => $article->getId(),
             ':id_username' => $user->getLogin()
         ));
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($data) {
+        if ($stmt->fetch(PDO::FETCH_ASSOC)) {
             return true;
         }
         return false;
     }
 
     /**
-     * Permet de savoir si un utilisateur a deja dislike un article
+     * Vérifie si l'utilisateur a deja dislike un article
      *
      * @param Article $article L'article dont on veut savoir si l'utilisateur l'a deja dislike
-     * @param User $user L'utilisateur dont on veut savoir si il a deja dislike l'article
+     * @param User $user L'utilisateur dont on veut savoir s'il a deja dislike l'article
      * @return bool true si l'utilisateur a deja dislike l'article, false sinon
      */
     public function alreadyDisliked(Article $article, User $user): bool
@@ -166,8 +163,7 @@ class ReactionRequest
             ':article_id' => $article->getId(),
             ':id_username' => $user->getLogin()
         ));
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($data) {
+        if ($stmt->fetch(PDO::FETCH_ASSOC)) {
             return true;
         }
         return false;

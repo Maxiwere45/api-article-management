@@ -32,7 +32,7 @@ if ($http_method == 'POST') {
             'exp' => (time() + 180)
         );
         $jwt = generate_jwt($headers, $payload);
-        deliverResponse(200, "Vous êtes connecté en tant que ".$username->getLogin()." avec le role ".$username->getRole()." ", $jwt);
+        deliverResponse(200, "Vous êtes connecté en tant que ".$username->getLogin()." avec le role ".$username->getRole(), $jwt);
         syslog(LOG_INFO, "L'utilisateur ".$username->getLogin()." s'est connecté avec succès");
     } else {
         deliverResponse(401, "Login ou mot de passe incorrect veuillez reessayer de nouveau !", null);

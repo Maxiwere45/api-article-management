@@ -68,7 +68,8 @@ class User
      * Cette fonction permet de savoir si l'utilisateur est modérateur
      * @return bool
      */
-    public function isModerator(): bool {
+    public function isModerator(): bool
+    {
         return $this->role === 'moderator';
     }
 
@@ -76,7 +77,8 @@ class User
      * Cette fonction permet de savoir si l'utilisateur est un éditeur
      * @return bool
      */
-    public function isPublisher(): bool {
+    public function isPublisher(): bool
+    {
         return $this->role === 'publisher';
     }
 

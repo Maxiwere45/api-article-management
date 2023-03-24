@@ -10,6 +10,10 @@ use model\User;
 use PDO;
 
 
+/**
+ * Class ArticleRequest
+ * @package model\dao\requests
+ */
 class ArticleRequest
 {
     private $linkpdo;
@@ -18,6 +22,11 @@ class ArticleRequest
         $this->linkpdo = Database::getInstance('root', "9wms351v")->getConnection();
     }
 
+    /**
+     * Retourne les articles d'un publisher
+     * @param User $user
+     * @return array
+     */
     public function getMyOwnArticles(User $user): array
     {
         $sql = "SELECT * FROM article WHERE author = :author";
@@ -34,6 +43,11 @@ class ArticleRequest
         return $articles;
     }
 
+    /**
+     * Retourne un article en fonction de son **id**
+     * @param string $article_id
+     * @return Article
+     */
     public function getArticle(string $article_id): Article
     {
         $sql = "SELECT * FROM article WHERE article_id = :id";
@@ -46,6 +60,11 @@ class ArticleRequest
         return new Article($data['article_id'], $data['content'], $data['date_de_publication'], $data['author']);
     }
 
+    /**
+     * Retourne tous les articles
+     * @param User $user
+     * @return array
+     */
     public function getAllArticles(User $user): array
     {
         if ($user->isModerator() || $user->isPublisher()) {
@@ -62,6 +81,11 @@ class ArticleRequest
         return $data;
     }
 
+    /**
+     * Insère un article dans la base de données
+     * @param Article $article
+     * @return bool
+     */
     public function insertArticle(Article $article): bool
     {
         $sql = "INSERT INTO article(article_id,content,date_de_publication,author)
@@ -75,6 +99,12 @@ class ArticleRequest
         ));
     }
 
+    /**
+     * Met à jour un article
+     * @param array $values
+     * @param User $user
+     * @return bool
+     */
     public function updateArticle(array $values, User $user): bool
     {
         if (!$user->isPublisher()) {
@@ -103,6 +133,11 @@ class ArticleRequest
         return $stmt->execute($params);
     }
 
+    /**
+     * Supprime un article ainsi que ses likes et dislikes
+     * @param Article $article
+     * @return bool
+     */
     public function deleteArticle(Article $article): bool
     {
         // Suppression des likes de l'article
