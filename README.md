@@ -126,7 +126,7 @@ Il existe 3 fonctions principales :
 }
 ````
 
-* **POST** `/articles` : *Créer - like - dislike* un article - créer un utilisateur
+* **POST** `/articles/id=LAS428` : *Créer - like - dislike* un article - créer un utilisateur
 ````json
 {
     "status": 200,
@@ -140,7 +140,7 @@ Il existe 3 fonctions principales :
 }
 ````
 
-* **PUT** `/articles/{id}` : Modifier un article/user 
+* **PUT** `/articles/id=LAS428` : Modifier un article/user 
 ````json
 {
     "status": 200,
@@ -154,7 +154,7 @@ Il existe 3 fonctions principales :
 }
 ````
 
-* **DELETE** `/articles/{id}` : Supprimer un article - retirer like/dislike sur un article
+* **DELETE** `/articles/id=LAS428` : Supprimer un article - retirer like/dislike sur un article
 ````json
 {
     "status": 200,
