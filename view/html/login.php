@@ -1,12 +1,16 @@
 <?php
 require_once(__DIR__ . "/../../model/dao/requests/UserRequest.php");
-
 use model\dao\requests\UserRequest;
-use model\User;
+
+session_start();
+if (isset($_GET['dec'])) {
+    session_destroy();
+    exit();
+}
 
 $username = null;
 $password = null;
-session_start();
+
 $userRequest = new UserRequest();
 
 if (isset($_POST['btn-validate'])) {
@@ -14,7 +18,7 @@ if (isset($_POST['btn-validate'])) {
     $password = hash('sha256', $_POST['inputPassword']);
     $user = $userRequest->getUser($username);
     if ($user->getPassword() == $password) {
-        $_SESSION['user'] = $user->getLogin();
+        $_SESSION['login'] = $user->getLogin();
         $_SESSION['role'] = $user->getRole();
         header("Location: index.php");
     } else {
