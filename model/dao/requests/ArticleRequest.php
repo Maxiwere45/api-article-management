@@ -62,16 +62,11 @@ class ArticleRequest
 
     /**
      * Retourne tous les articles
-     * @param User $user
      * @return array
      */
-    public function getAllArticles(User $user): array
+    public function getAllArticles(): array
     {
-        if ($user->isModerator() || $user->isPublisher()) {
-            $sql = "SELECT * FROM article";
-        } else {
-            $sql = "SELECT author, content, date_de_publication FROM article";
-        }
+        $sql = "SELECT * FROM article";
         $stmt = $this->linkpdo->prepare($sql);
         $stmt->execute();
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);

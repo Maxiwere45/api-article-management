@@ -69,7 +69,7 @@ switch ($http_method) {
             $matchingData = $articleRequest->getMyOwnArticles($user);
             deliverResponse(200, "My articles", $matchingData);
         } else {
-            $matchingData = $articleRequest->getAllArticles($user);
+            $matchingData = $articleRequest->getAllArticles();
             deliverResponse(200, "All articles", $matchingData);
         }
         break;

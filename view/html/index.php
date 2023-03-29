@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . "/../../model/dao/requests/ArticleRequest.php";
 require_once __DIR__ . "/../../model/dao/requests/UserRequest.php";
+require_once __DIR__ . "/../../model/User.php";
+
+use model\User;
 use model\dao\requests\ArticleRequest;
 use model\dao\requests\UserRequest;
 
@@ -9,11 +12,15 @@ if (!isset($_SESSION['login'])) {
     header('Location: login.php');
     exit();
 }
-
 $articleRequest = new ArticleRequest();
 $userRequest = new UserRequest();
-$user = $userRequest->getUser($_SESSION['login']);
-$articles = $articleRequest->getAllArticles($user);
+if ($_SESSION['login'] == 'anonyme'){
+    $user = new User('anonyme', 'anonyme', 'anonyme');
+} else {
+    $user = $userRequest->getUser($_SESSION['login']);
+}
+
+$articles = $articleRequest->getAllArticles();
 
 ?>
 
@@ -42,7 +49,7 @@ $articles = $articleRequest->getAllArticles($user);
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="login.php?dec=1">Logout</a></li>
+                        <li><a class="dropdown-item" href="login.php">Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -54,50 +61,24 @@ $articles = $articleRequest->getAllArticles($user);
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
                             <a class="nav-link" href="index.php" >
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-fire"></i></div>
                                 Tableau de bord
                             </a>
-                            <div class="sb-sidenav-menu-heading">Interface</div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Layouts
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            <a class="nav-link" href="publishers.php" >
+                                <div class="sb-nav-link-icon"><i class="fa-regular fa-pen-to-square"></i></i></div>
+                                Publishers
                             </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="layout-static.html">Static Navigation</a>
-                                    <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
-                                </nav>
-                            </div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Pages
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            <a class="nav-link" href="moderators.php">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-shield"></i></div>
+                                Moderators
                             </a>
-                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                        Authentication
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="login.php">Login</a>
-                                        </nav>
-                                    </div>
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                                        Error
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="../../../../../Users/Maxiwere/Downloads/startbootstrap-sb-admin-gh-pages/401.html">401 Page</a>
-                                            <a class="nav-link" href="../../../../../Users/Maxiwere/Downloads/startbootstrap-sb-admin-gh-pages/404.html">404 Page</a>
-                                            <a class="nav-link" href="../../../../../Users/Maxiwere/Downloads/startbootstrap-sb-admin-gh-pages/500.html">500 Page</a>
-                                        </nav>
-                                    </div>
-                                </nav>
-                            </div>
+                            <div class="sb-sidenav-menu-heading">Master</div>
+                            <a class="nav-link" href="adminpanel.php" >
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-user-shield"></i></div>
+                                Admin panel
+                            </a>
+
+                            <!--
                             <div class="sb-sidenav-menu-heading">Addons</div>
                             <a class="nav-link" href="charts.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
@@ -107,11 +88,12 @@ $articles = $articleRequest->getAllArticles($user);
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Tables
                             </a>
+                            -->
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
-                        Start Bootstrap
+                        <div class="small">Logged in as :</div>
+                        <?php echo strtoupper($_SESSION['role']) ." ". $_SESSION['login']; ?>
                     </div>
                 </nav>
             </div>
@@ -122,8 +104,6 @@ $articles = $articleRequest->getAllArticles($user);
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item active">DATA de l'API</li>
                         </ol>
-                        <div class="row">
-
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
@@ -159,10 +139,10 @@ $articles = $articleRequest->getAllArticles($user);
                                     }
                                     ?>
                                         <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>61</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                     </tbody>
                                 </table>
