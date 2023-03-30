@@ -2,11 +2,18 @@
 require_once (__DIR__ . "/../../model/dao/requests/ArticleRequest.php");
 use model\dao\requests\ArticleRequest;
 
-$id = $_POST['id'] ?? null;
+session_start();
+if (!isset($_SESSION['login'])) {
+    header('Location: login.php');
+    exit();
+}
+
+$id = $_GET['id'] ?? die('Erreur : ID non défini');
 
 if (isset($_POST['confirmo'])) {
     $articleRequest = new ArticleRequest();
-    $result = $articleRequest->deleteArticle($id);
+    $article = $articleRequest->getArticle($id);
+    $result = $articleRequest->deleteArticle($article);
     if ($result) {
         header("Location: index.php");
     } else {

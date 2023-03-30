@@ -12,6 +12,13 @@ if (!isset($_SESSION['login'])) {
     header('Location: login.php');
     exit();
 }
+
+$session_duration = time() - $_SESSION['start_time'];
+if ($session_duration > 3600) {
+    header('Location: login.php');
+    exit();
+}
+
 $articleRequest = new ArticleRequest();
 $userRequest = new UserRequest();
 if ($_SESSION['login'] == 'anonyme'){
@@ -101,13 +108,15 @@ $articles = $articleRequest->getAllArticles();
                 <main>
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">Tableau de bord</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">DATA de l'API</li>
-                        </ol>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                Toutes les <strong>Articles</strong> sont affichées ci-dessous. Vous pouvez filtrer les résultats en utilisant les filtres du tableau et la recherche.
+                            </div>
+                        </div>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                Articles
+                                Liste des Articles
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">

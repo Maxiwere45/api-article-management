@@ -8,9 +8,9 @@ if (isset($_GET['login'])) {
     exit();
 }
 
+# Variables
 $username = null;
 $password = null;
-
 $userRequest = new UserRequest();
 
 if (isset($_POST['btn-validate'])) {
@@ -26,6 +26,7 @@ if (isset($_POST['btn-validate'])) {
         if ($user->getPassword() == $password) {
             $_SESSION['login'] = $user->getLogin();
             $_SESSION['role'] = $user->getRole();
+            $_SESSION['start_time'] = time();
             header("Location: index.php");
         }
         else {

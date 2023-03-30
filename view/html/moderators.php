@@ -12,6 +12,13 @@ if (!isset($_SESSION['login'])) {
     header('Location: login.php');
     exit();
 }
+
+$session_duration = time() - $_SESSION['start_time'];
+if ($session_duration > 3600) {
+    header('Location: login.php');
+    exit();
+}
+
 $articleRequest = new ArticleRequest();
 $userRequest = new UserRequest();
 if ($_SESSION['login'] == 'anonyme'){
@@ -104,9 +111,11 @@ $articles = $articleRequest->getAllArticles();
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Tableau de bord</h1>
+                <h1 class="mt-4">Moderator panel</h1>
+                <div class="separator-breadcrumb border-top"></div>
                 <ol class="breadcrumb mb-4">
-                    <li class="breadcrumb-item active">DATA de l'API</li>
+                    <li class="breadcrumb-item"><a href="#" style="text-decoration: none">Tableau de bord</a></li>
+                    <li class="breadcrumb-item active">Modérateur</li>
                 </ol>
                 <!--Barre de recherche-->
                 <div class="card mb-4">
@@ -118,6 +127,7 @@ $articles = $articleRequest->getAllArticles();
                             </div>
                         </form>
                     </div>
+                    <!-- Tableau des articles-->
                 </div>
                 <div class="card mb-4">
                     <div class="card-header">
@@ -152,7 +162,7 @@ $articles = $articleRequest->getAllArticles();
                                 echo "<td>".$value['content']."</td>";
                                 echo "<td>".$value['date_de_publication']."</td>";
                                 echo "<td>".$value['author']."</td>";
-                                echo "<td><a href='deleteconfirm.php.php?id=".$value['article_id']."' id='link-del'>supprimer</a></td>";
+                                echo "<td><a href='deleteconfirm.php?id=".$value['article_id']."' id='link-del'>supprimer</a></td>";
                                 echo "</tr>";
                             }
                             ?>

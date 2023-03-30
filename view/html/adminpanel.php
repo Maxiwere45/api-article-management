@@ -13,6 +13,12 @@ if (!isset($_SESSION['login'])) {
     exit();
 }
 
+$session_duration = time() - $_SESSION['start_time'];
+if ($session_duration > 3600) {
+    header('Location: login.php');
+    exit();
+}
+
 $articleRequest = new ArticleRequest();
 $userRequest = new UserRequest();
 if ($_SESSION['login'] == 'anonyme'){
@@ -104,56 +110,7 @@ $articles = $articleRequest->getAllArticles();
     </div>
     <div id="layoutSidenav_content">
         <main>
-            <div class="container-fluid px-4">
-                <h1 class="mt-4">Tableau de bord</h1>
-                <ol class="breadcrumb mb-4">
-                    <li class="breadcrumb-item active">DATA de l'API</li>
-                </ol>
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <i class="fas fa-table me-1"></i>
-                        Articles
-                    </div>
-                    <div class="card-body">
-                        <table id="datatablesSimple">
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>contenu</th>
-                                <th>Date date de publication</th>
-                                <th>Auteur</th>
-                            </tr>
-                            </thead>
-                            <tfoot>
-                            <tr>
-                                <th>ID</th>
-                                <th>contenu</th>
-                                <th>Date date de publication</th>
-                                <th>Auteur</th>
-                            </tr>
-                            </tfoot>
-                            <tbody>
-                            <?php
-                            foreach ($articles as $key => $value) {
-                                echo "<tr>";
-                                echo "<td>".$value['article_id']."</td>";
-                                echo "<td>".$value['content']."</td>";
-                                echo "<td>".$value['date_de_publication']."</td>";
-                                echo "<td>".$value['author']."</td>";
-                                echo "</tr>";
-                            }
-                            ?>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            <!-- Page Heading -->
         </main>
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
