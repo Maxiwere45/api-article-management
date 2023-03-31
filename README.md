@@ -10,10 +10,10 @@
 * **[Sommaire](#sommaire)**
 * **[Fonctionnalités](#fonctionnalités)**
 * **[Restrictions d'accès](#restrictions-daccès)**
-  * [Gestions des erreurs](#gestions-des-erreurs)
-  * [Test](#tests)
-  * [Crédits](#crédits)
-  * [Professeurs de la ressource](#professeurs-de-la-ressource-)
+* **[Gestions des erreurs](#gestions-des-erreurs)**
+* **[Test](#tests)**
+* **[Crédits](#crédits)**
+* **[Professeurs de la ressource](#professeurs-de-la-ressource-)**
 
 ## Fonctionnalités
 Il existe 3 fonctions principales :
