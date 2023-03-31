@@ -24,4 +24,5 @@ vous pouvez lancer l'API en local en suivant les instructions ci-dessous.
 
 ---
 
-J'espère que ça vous aidera. N'hésitez pas à me contacter si vous avez des questions.
+* J'espère que ça vous aidera. N'hésitez pas à me contacter si vous avez des questions.
+* La partie cliente fourni avec l'API sera disponible prochainement ^^
