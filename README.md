@@ -19,7 +19,8 @@
 # Informations
 
 * **[Accès à la ressource](http://article-manager.byethost7.com/controller/server-api.php)**
-  * Attention, l'API est en maintenance, elle sera disponible prochainement.
+  * Attention, l'URL de l'API est en maintenance, elle sera disponible prochainement.
+  * Veuillez suivre les instructions d'installation `installation.md` pour lancer l'API en local.
   * Veuillez vous assurer que votre navigateur ou application client supporte le JavaScript.
 * **[Client](https://article-manager.herokuapp.com/)** *pas encore disponible*
 
