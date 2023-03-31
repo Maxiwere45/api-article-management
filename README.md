@@ -3,7 +3,7 @@
 <img  style="float:center; margin: 0 10px 0;" alt="" src="./ressources/logo_article_manager.png" width=120>
 
 ## Description
-**ARTICLE MANAGER** une API pour la gestion d'articles de blogs. Cette solution est orientée ressources, c’est-à-dire sur une API REST.
+**ARTICLE MANAGER** une API pour la gestion d'articles de blogs. Cette solution est orientée ressources, c’est-à-dire sur une API *REST*.
 
 # Sommaire
 
@@ -14,6 +14,12 @@
 * **[Test](#tests)**
 * **[Crédits](#crédits)**
 * **[Professeurs de la ressource](#professeurs-de-la-ressource-)**
+
+# Informations
+
+* **[Accès à la ressource](https://article-manager.herokuapp.com/)**
+* **[Client](https://article-manager.herokuapp.com/)**
+
 
 ## Fonctionnalités
 Il existe 3 fonctions principales :
@@ -203,7 +209,7 @@ Il existe 3 fonctions principales :
 <img  style="float:center; margin: 0 10px 0;" alt="" src="./ressources/logo_iut_info.png" width=120>
 
 Ce programme a été réalisé par des étudiants de l'**IUT informatique de Toulouse** dans le cadre d'un mini projet de groupe en programmation PHP. 
-Pour en savoir un peu plus, vous pouvez contacter les développeurs de l'API
+Pour en savoir plus, vous pouvez contacter les développeurs de l'API
 * [**Amdjad Anrifou**](https://github.com/maxiwere45)
 * [**Carl Premi**](https://github.com/otsubyo)
 
