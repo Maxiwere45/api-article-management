@@ -1,5 +1,5 @@
 <?php
-echo hash("sha256", "publisherx5");
+echo hash("sha256", "publisherx4");
 
 
 
