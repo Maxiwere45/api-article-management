@@ -110,6 +110,14 @@ $articles = $articleRequest->getAllArticles();
     <div id="layoutSidenav_content">
         <main>
             <!-- Page Heading -->
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">Admin Panel</h1>
+                <div class="separator-breadcrumb border-top"></div>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item"><a href="index.php" style="text-decoration: none">Tableau de bord</a></li>
+                    <li class="breadcrumb-item active">Admin panel</li>
+                </ol>
+            </div>
         </main>
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">

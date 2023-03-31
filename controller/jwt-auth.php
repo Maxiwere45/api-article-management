@@ -18,6 +18,10 @@ $http_method = $_SERVER['REQUEST_METHOD'];
 if ($http_method == 'POST') {
     $data = (array) json_decode(file_get_contents('php://input'), true);
     $userRequest = new UserRequest();
+    if (!isset($data['username']) || !isset($data['password'])) {
+        deliverResponse(400, "Requête invalide", null);
+        exit();
+    }
     if (isValidUser($data['username'], $data['password'])) {
         // Traitement
         $username = $userRequest->getUser($data['username']);

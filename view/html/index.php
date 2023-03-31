@@ -21,7 +21,7 @@ if ($session_duration > 3600) {
 
 $articleRequest = new ArticleRequest();
 $userRequest = new UserRequest();
-if ($_SESSION['login'] == 'anonyme'){
+if ($_SESSION['login'] == 'anonyme') {
     $user = new User('anonyme', 'anonyme', 'anonyme');
 } else {
     $user = $userRequest->getUser($_SESSION['login']);
@@ -161,7 +161,7 @@ $articles = $articleRequest->getAllArticles();
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2023</div>
+                            <div class="text-muted">Copyright &copy; Article Manager 2023</div>
                             <div>
                                 <a href="#">Privacy Policy</a>
                                 &middot;

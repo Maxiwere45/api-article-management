@@ -115,7 +115,7 @@ $articles = $articleRequest->getAllArticles();
                 <h1 class="mt-4">Publisher panel</h1>
                 <div class="separator-breadcrumb border-top"></div>
                 <ol class="breadcrumb mb-4">
-                    <li class="breadcrumb-item"><a href="#" style="text-decoration: none">Tableau de bord</a></li>
+                    <li class="breadcrumb-item"><a href="index.php" style="text-decoration: none">Tableau de bord</a></li>
                     <li class="breadcrumb-item active">Publisher</li>
                 </ol>
                 <div class="card mb-4">
@@ -167,7 +167,7 @@ $articles = $articleRequest->getAllArticles();
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
                 <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Copyright &copy; Your Website 2023</div>
+                    <div class="text-muted">Copyright &copy; Article Manager 2023</div>
                     <div>
                         <a href="#">Privacy Policy</a>
                         &middot;

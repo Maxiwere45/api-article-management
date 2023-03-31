@@ -18,7 +18,6 @@ class UserRequest
     {
         $this->linkpdo = Database::getInstance('root', "9wms351v")->getConnection();
     }
-
     public function getUser(string $user): User
     {
         $sql = "SELECT * FROM users WHERE username = :username";
