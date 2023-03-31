@@ -17,7 +17,7 @@
 
 # Informations
 
-* **[Accès à la ressource](https://article-manager.herokuapp.com/)**
+* **[Accès à la ressource](http://article-manager.byethost7.com/controller/server-api.php)**
 * **[Client](https://article-manager.herokuapp.com/)**
 
 
