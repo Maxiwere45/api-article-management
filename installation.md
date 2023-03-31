@@ -12,7 +12,7 @@ vous pouvez lancer l'API en local en suivant les instructions ci-dessous.
 
 ## Installation
 
-* Télecharger le projet
+* Télécharger le projet
 * Dézipper le projet dans le dossier `www` de votre serveur web
 * Créer une base de données `api-articles-db` dans votre serveur MySQL
 * Importer le fichier `api-articles-db.sql` dans votre base de données se trouvant dans le dossier `model/dao/sql_scripts/data/api-article-db.sql`
@@ -22,7 +22,11 @@ vous pouvez lancer l'API en local en suivant les instructions ci-dessous.
   * Accéder à l'authentification JWT via l'URL `http://localhost/api-article-management/controller/jwt-auth.php`
   * Accéder à l'application cliente via l'URL `http://localhost/api-article-management/view/html/login.php`
 
+## Informations complémentaires
+
+* Les identifiants des users sont dans le fichier `model/dao/sql_scripts/users.json`
+
 ---
 
 * J'espère que ça vous aidera. N'hésitez pas à me contacter si vous avez des questions.
-* La partie cliente fourni avec l'API sera disponible prochainement ^^
+* La partie cliente fournie avec l'API sera disponible prochainement ^^
