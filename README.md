@@ -13,6 +13,7 @@
 * **[Restrictions d'accès](#restrictions-daccès)**
 * **[Gestions des erreurs](#gestions-des-erreurs)**
 * **[Test](#tests)**
+* **[Informations complémentaires](#informations-complémentaires)**
 * **[Crédits](#crédits)**
 * **[Professeurs de la ressource](#professeurs-de-la-ressource-)**
 
