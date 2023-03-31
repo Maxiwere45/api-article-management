@@ -18,6 +18,8 @@
 # Informations
 
 * **[Accès à la ressource](http://article-manager.byethost7.com/controller/server-api.php)**
+  * Attention, l'API est en maintenance, elle sera disponible prochainement.
+  * Veuillez vous assurer que votre navigateur ou application client supporte le JavaScript.
 * **[Client](https://article-manager.herokuapp.com/)** *pas encore disponible*
 
 
