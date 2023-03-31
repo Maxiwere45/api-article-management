@@ -8,6 +8,7 @@
 # Sommaire
 
 * **[Sommaire](#sommaire)**
+* **[Informations](#informations)**
 * **[Fonctionnalités](#fonctionnalités)**
 * **[Restrictions d'accès](#restrictions-daccès)**
 * **[Gestions des erreurs](#gestions-des-erreurs)**
@@ -24,6 +25,7 @@
 
 
 ## Fonctionnalités
+
 Il existe 3 fonctions principales :
 * La publication, la consultation, la modification et la suppression des articles de blogs. 
   * Un article
