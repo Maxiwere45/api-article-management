@@ -1,0 +1,523 @@
+{
+	"info": {
+		"_postman_id": "ad59e2ec-da40-4b9f-b3a9-5059465fe2ff",
+		"name": "ARTICLE MANAGER",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25760237"
+	},
+	"item": [
+		{
+			"name": "AUTH ADMIN",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"maxiwere\",\r\n    \"password\": \"9dfe351b\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api-article-management/controller/jwt-auth.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-article-management",
+						"controller",
+						"jwt-auth.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AUTH PUBLISHER",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"yahyanft\",\r\n    \"password\":\"publisherx2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api-article-management/controller/jwt-auth.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-article-management",
+						"controller",
+						"jwt-auth.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ALL ARTICLES",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api-article-management/controller/server-api.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-article-management",
+						"controller",
+						"server-api.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ARTICLE ID BY ANONYMOUS",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api-article-management/controller/server-api.php?id=LAL456",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-article-management",
+						"controller",
+						"server-api.php"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "LAL456"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ARTICLE ID BY PUBLISHER",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InlhaHlhbmZ0Iiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6MTY4MDI4NTkxNn0.r5r0j3N2OB-k7GlHWwy_-Jwgr150qcKVUkvWmv-K0Ho",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost/api-article-management/controller/server-api.php?id=LAL456",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-article-management",
+						"controller",
+						"server-api.php"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "LAL456"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ARTICLE ID BY MODERATOR",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im1heGl3ZXJlIiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6MTY4MDI4NjExNH0.WHwXhZhoOfLQE2DtyA_IvLXY6WsHb6_YYLCabGhFr8E",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost/api-article-management/controller/server-api.php?id=LAL456",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-article-management",
+						"controller",
+						"server-api.php"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "LAL456"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ADD ARTICLE",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InlhaHlhbmZ0Iiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6MTY4MDI4MjI2N30.hlvAXcsW2sbQR1OpWfe6G2_645blbZZkhjC4nXCkdTI",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"AML867\",\r\n    \"contenu\":\"Aujourd'hui est le présent, mais demain est un cadeau.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api-article-management/controller/server-api.php?add=article",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-article-management",
+						"controller",
+						"server-api.php"
+					],
+					"query": [
+						{
+							"key": "add",
+							"value": "article"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LIKE ARTICLE",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InlhaHlhbmZ0Iiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6MTY4MDI4MjQ4MX0.HC8u6U9_dEaTEQLUrE0YiDY3PkY4Z-vfGXXj96nZfH0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id_article\":\"AML867\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api-article-management/controller/server-api.php?add=like",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-article-management",
+						"controller",
+						"server-api.php"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "add",
+							"value": "like"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DISLIKE ARTICLE",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InlhaHlhbmZ0Iiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6MTY4MDI4NjQwMX0.iy5Ww4ik2t7FWNnhv0CEScpIWUuwaPaYnhm_AUt3p48",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id_article\":\"LAL456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api-article-management/controller/server-api.php?add=dislike",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-article-management",
+						"controller",
+						"server-api.php"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "add",
+							"value": "dislike"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EDIT ARTICLE",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImZ1aml0b28iLCJyb2xlIjoicHVibGlzaGVyIiwiZXhwIjoxNjgwMjg2Njg3fQ.5UFq4Llkt_6bcJaACOZApFo7zBI-JSNuR12LBomqn9w",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"article_id\":\"LAL456\",\r\n    \"content\":\"Un monde bien meilleur !\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api-article-management/controller/server-api.php?edit=article",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-article-management",
+						"controller",
+						"server-api.php"
+					],
+					"query": [
+						{
+							"key": "edit",
+							"value": "article"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE ARTICLE BY OWNER",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InlhaHlhbmZ0Iiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6MTY4MDI4MjYzNX0.JrWOwvG9JNUTw5MSMtTH0nTBRT56CmdpNgUTKEXxYvY",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"article_id\":\"AML867\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api-article-management/controller/server-api.php?delete=article",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-article-management",
+						"controller",
+						"server-api.php"
+					],
+					"query": [
+						{
+							"key": "delete",
+							"value": "article"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE ARTICLE BY MODERATOR",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im1heGl3ZXJlIiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6MTY4MDI4MjcxM30.hkYDmVSk0v7HzUeY5b7f_hWsdKJ7yA7ZsNOWsfh5mUs",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"article_id\":\"MNB538\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api-article-management/controller/server-api.php?delete=article",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-article-management",
+						"controller",
+						"server-api.php"
+					],
+					"query": [
+						{
+							"key": "delete",
+							"value": "article"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE LIKE",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InlhaHlhbmZ0Iiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6MTY4MDI4Mjc1MX0.PWgTeZvg-coMANxihTbdVw6X0SO-_JARy6P_LU2vlJw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"LAL456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api-article-management/controller/server-api.php?delete=unlike",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-article-management",
+						"controller",
+						"server-api.php"
+					],
+					"query": [
+						{
+							"key": "delete",
+							"value": "unlike"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE DISLIKE",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InlhaHlhbmZ0Iiwicm9sZSI6InB1Ymxpc2hlciIsImV4cCI6MTY4MDI4Mjc1MX0.PWgTeZvg-coMANxihTbdVw6X0SO-_JARy6P_LU2vlJw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"LAL456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api-article-management/controller/server-api.php?delete=undislike",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-article-management",
+						"controller",
+						"server-api.php"
+					],
+					"query": [
+						{
+							"key": "delete",
+							"value": "undislike"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

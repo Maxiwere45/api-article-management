@@ -87,6 +87,9 @@ switch ($http_method) {
             $data = json_decode($postedData, true);
 
             // Protection contre les injections SQL et Cie
+            if ($data == null){
+                die("ERROR 400 : La requete n'est pas valide !");
+            }
             $data = array_map('htmlspecialchars', $data);
 
             // Traitement
