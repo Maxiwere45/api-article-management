@@ -5,6 +5,15 @@
 ## Description
 **ARTICLE MANAGER** une API pour la gestion d'articles de blogs. Cette solution est orientée ressources, c’est-à-dire sur une API REST.
 
+# Sommaire
+
+* **[Sommaire](#sommaire)**
+* **[Fonctionnalités](#fonctionnalités)**
+* **[Restrictions d'accès](#restrictions-daccès)**
+  * [Gestions des erreurs](#gestions-des-erreurs)
+  * [Test](#tests)
+  * [Crédits](#crédits)
+  * [Professeurs de la ressource](#professeurs-de-la-ressource-)
 
 ## Fonctionnalités
 Il existe 3 fonctions principales :
