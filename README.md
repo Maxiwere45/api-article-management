@@ -21,8 +21,8 @@
 
 * **[Accès à la ressource](http://article-manager.byethost7.com/controller/server-api.php)**
   * Attention, l'URL de l'API est en maintenance
-  * En cas de problèmes, veuillez suivre les instructions d'installation `installation.md` pour lancer l'API en local.
-  * Veuillez vous assurer que votre navigateur ou application client supporte le JavaScript.
+  * En cas de problème, veuillez suivre les instructions d'installation `installation.md` pour lancer l'API en local.
+  * Veuillez vous assurer que votre navigateur ou application client supporte le JavaScript (sauf en local).
 * **[Serveur d'autentification JWT](http://article-manager.byethost7.com/controller/jwt-auth.php)**
 * **[Client](https://article-manager.herokuapp.com/)** *pas encore disponible*
 
