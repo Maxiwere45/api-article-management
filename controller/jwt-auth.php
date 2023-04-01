@@ -41,6 +41,8 @@ if ($http_method == 'POST') {
     } else {
         deliverResponse(401, "Login ou mot de passe incorrect veuillez reessayer de nouveau !", null);
     }
+} else {
+    print_r("Serveur en attente de requête...\n");
 }
 
-print_r("Serveur en attente de requête...\n");
+
