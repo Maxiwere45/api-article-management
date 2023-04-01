@@ -5,7 +5,6 @@ require_once(__DIR__ . "/../model/dao/requests/UserRequest.php");
 require_once(__DIR__ . "/../model/User.php");
 require_once __DIR__ . "/../libs/functions-utils.php";
 require_once(__DIR__ . "/../libs/jwt-utils.php");
-require_once '../libs/jwt-utils.php';
 use model\dao\requests\UserRequest;
 use function libs\deliverResponse;
 use function libs\isValidUser;
@@ -33,7 +32,7 @@ if ($http_method == 'POST') {
         $payload = array(
             'username' => $username->getLogin(),
             'role' => $username->getRole(),
-            'exp' => (time() + 180)
+            'exp' => (time() + 3600)
         );
         $jwt = generate_jwt($headers, $payload);
         deliverResponse(200, "Vous êtes connecté en tant que ".$username->getLogin()." avec le role ".$username->getRole(), $jwt);
