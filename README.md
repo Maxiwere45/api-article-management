@@ -23,7 +23,7 @@
   * Attention, l'URL de l'API est en maintenance
   * En cas de problèmes, veuillez suivre les instructions d'installation `installation.md` pour lancer l'API en local.
   * Veuillez vous assurer que votre navigateur ou application client supporte le JavaScript.
-* **[Serveur d'autentification JWT](http://article-manager.byethost7.com/controller/jwt-auth.php)** *bientôt disponible*
+* **[Serveur d'autentification JWT](http://article-manager.byethost7.com/controller/jwt-auth.php)**
 * **[Client](https://article-manager.herokuapp.com/)** *pas encore disponible*
 
 
