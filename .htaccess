@@ -2,3 +2,10 @@
 RewriteEngine On
 RewriteRule ^articles_api/(.*)$ api-article-management/controller/server-api.php?id=$1 [L]
 RewriteRule ^articles_api/?$ api-article-management/controller/server-api.php [L,QSA]
+
+<Limit GET POST PUT DELETE OPTIONS>
+Require all granted
+</Limit>
+<LimitExcept GET POST PUT DELETE OPTIONS>
+Require all denied
+</LimitExcept>

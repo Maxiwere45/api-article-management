@@ -21,14 +21,14 @@ if ($session_duration > 3600) {
 
 $articleRequest = new ArticleRequest();
 $userRequest = new UserRequest();
-if ($_SESSION['login'] == 'anonyme'){
+if ($_SESSION['login'] == 'anonyme') {
     $user = new User('anonyme', 'anonyme', 'anonyme');
 } else {
     $user = $userRequest->getUser($_SESSION['login']);
 }
 
 // Check if user is master [maxiwere]
-if (!$user->isMaster()){
+if (!$user->isModerator() && !$user->isMaster()) {
     header('Location: index.php');
     exit();
 }
@@ -43,7 +43,8 @@ $articles = $articleRequest->getAllArticles();
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Tableau de bord</title>
+    <title>Admin Panel</title>
+    <link rel="icon" type="image/png" href="onglet_icon.png">
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -69,7 +70,7 @@ $articles = $articleRequest->getAllArticles();
         <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
             <div class="sb-sidenav-menu">
                 <div class="nav">
-                    <div class="sb-sidenav-menu-heading">Core</div>
+                    <div class="sb-sidenav-menu-heading">PRINCIPALE</div>
                     <a class="nav-link" href="index.php" >
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-fire"></i></div>
                         Tableau de bord
@@ -82,27 +83,15 @@ $articles = $articleRequest->getAllArticles();
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-shield"></i></div>
                         Moderators
                     </a>
-                    <div class="sb-sidenav-menu-heading">Master</div>
+                    <div class="sb-sidenav-menu-heading">GESTION</div>
                     <a class="nav-link" href="adminpanel.php" >
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-user-shield"></i></div>
-                        Admin panel
+                        Admin Panel
                     </a>
-
-                    <!--
-                    <div class="sb-sidenav-menu-heading">Addons</div>
-                    <a class="nav-link" href="charts.html">
-                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                        Charts
-                    </a>
-                    <a class="nav-link" href="tables.html">
-                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                        Tables
-                    </a>
-                    -->
                 </div>
             </div>
             <div class="sb-sidenav-footer">
-                <div class="small">Logged in as :</div>
+                <div class="small">Connecté en tant que :</div>
                 <?php echo strtoupper($_SESSION['role']) ." ". $_SESSION['login']; ?>
             </div>
         </nav>
@@ -117,12 +106,18 @@ $articles = $articleRequest->getAllArticles();
                     <li class="breadcrumb-item"><a href="index.php" style="text-decoration: none">Tableau de bord</a></li>
                     <li class="breadcrumb-item active">Admin panel</li>
                 </ol>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <p class="text-warning">Ici vous pouvez gérer les utilisateurs</p>
+                        <p class="text-danger"><strong>EN MAINTENANCE...</strong></p>
+                    </div>
+                </div>
             </div>
         </main>
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
                 <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Copyright &copy; Your Website 2023</div>
+                    <div class="text-muted">Copyright &copy; Article Manager 2023</div>
                     <div>
                         <a href="#">Privacy Policy</a>
                         &middot;
@@ -135,9 +130,6 @@ $articles = $articleRequest->getAllArticles();
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script src="js/scripts.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-<script src="assets/demo/chart-area-demo.js"></script>
-<script src="assets/demo/chart-bar-demo.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
 <script src="js/datatables-simple-demo.js"></script>
 </body>

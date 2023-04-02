@@ -2,8 +2,13 @@
 require_once __DIR__ . "/../../model/dao/requests/ArticleRequest.php";
 require_once __DIR__ . "/../../model/dao/requests/UserRequest.php";
 require_once __DIR__ . "/../../model/User.php";
+require_once __DIR__ . "/../../model/dao/requests/MOPRequest.php";
+require_once __DIR__ . "/../../model/dao/requests/ReactionRequest.php";
 
-use model\User;
+
+use model\Article;
+use model\dao\requests\MOPRequest;
+use model\dao\requests\ReactionRequest;
 use model\dao\requests\ArticleRequest;
 use model\dao\requests\UserRequest;
 
@@ -19,21 +24,66 @@ if ($session_duration > 3600) {
     exit();
 }
 
-$articleRequest = new ArticleRequest();
 $userRequest = new UserRequest();
-if ($_SESSION['login'] == 'anonyme'){
-    $user = new User('anonyme', 'anonyme', 'anonyme');
-} else {
-    $user = $userRequest->getUser($_SESSION['login']);
-}
+$resArticle = null;
+$display = "none";
 
-// Check if user is publisher
-if (!$user->isPublisher() && !$user->isMaster()) {
+if ($_SESSION['login'] == 'anonyme') {
     header('Location: index.php');
     exit();
+} else {
+    $user = $userRequest->getUser($_SESSION['login']);
+    if (!$user->isPublisher() && !$user->isMaster()) {
+        header('Location: index.php');
+        exit();
+    }
 }
 
+$articleRequest = new ArticleRequest();
+$publisherRequest = new MOPRequest();
+$reactionRequest = new ReactionRequest();
 $articles = $articleRequest->getAllArticles();
+$article = null;
+
+// RECHERCHE
+if (isset($_GET['btnSubmit']) && strlen($_GET['searchID']) > 0) {
+    $search = $_GET['searchID'];
+    $article = $articleRequest->getArticle($search);
+    $display = "block";
+    $cookieValue = serialize(array("idArticle" => $search, "displayStat" => $display));
+    setcookie("search", $cookieValue, time() + 3600, "/");
+}
+
+// REACTION
+if (isset($_GET['likeAR']) && isset($_COOKIE['search'])) {
+    $values = unserialize($_COOKIE["search"]);
+    $search = $values['idArticle'];
+    $article = $articleRequest->getArticle($search);
+    $display = $values['displayStat'];
+    if ($reactionRequest->alreadyLiked($article, $user)) {
+        $reactionRequest->unlikerArticle($article, $user);
+    } elseif ($reactionRequest->alreadyDisliked($article, $user)) {
+        $reactionRequest->undislikerArticle($article, $user);
+        $reactionRequest->likerArticle($article, $user);
+    } else {
+        $reactionRequest->likerArticle($article, $user);
+    }
+}
+
+if (isset($_GET['dislikeAR']) && isset($_COOKIE['search'])) {
+    $values = unserialize($_COOKIE["search"]);
+    $search = $values['idArticle'];
+    $article = $articleRequest->getArticle($search);
+    $display = $values['displayStat'];
+    if ($reactionRequest->alreadyDisliked($article, $user)) {
+        $reactionRequest->undislikerArticle($article, $user);
+    } elseif ($reactionRequest->alreadyLiked($article, $user)) {
+        $reactionRequest->unlikerArticle($article, $user);
+        $reactionRequest->dislikerArticle($article, $user);
+    } else {
+        $reactionRequest->dislikerArticle($article, $user);
+    }
+}
 
 ?>
 
@@ -45,7 +95,8 @@ $articles = $articleRequest->getAllArticles();
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Tableau de bord</title>
+    <title>Publisher panel</title>
+    <link rel="icon" type="image/png" href="onglet_icon.png">
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -71,7 +122,7 @@ $articles = $articleRequest->getAllArticles();
         <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
             <div class="sb-sidenav-menu">
                 <div class="nav">
-                    <div class="sb-sidenav-menu-heading">Core</div>
+                    <div class="sb-sidenav-menu-heading">PRINCIPALE</div>
                     <a class="nav-link" href="index.php" >
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-fire"></i></div>
                         Tableau de bord
@@ -84,27 +135,15 @@ $articles = $articleRequest->getAllArticles();
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-shield"></i></div>
                         Moderators
                     </a>
-                    <div class="sb-sidenav-menu-heading">Master</div>
+                    <div class="sb-sidenav-menu-heading">GESTION</div>
                     <a class="nav-link" href="adminpanel.php" >
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-user-shield"></i></div>
-                        Admin panel
+                        Admin Panel
                     </a>
-
-                    <!--
-                    <div class="sb-sidenav-menu-heading">Addons</div>
-                    <a class="nav-link" href="charts.html">
-                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                        Charts
-                    </a>
-                    <a class="nav-link" href="tables.html">
-                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                        Tables
-                    </a>
-                    -->
                 </div>
             </div>
             <div class="sb-sidenav-footer">
-                <div class="small">Logged in as :</div>
+                <div class="small">Connecté en tant que :</div>
                 <?php echo strtoupper($_SESSION['role']) ." ". $_SESSION['login']; ?>
             </div>
         </nav>
@@ -119,6 +158,42 @@ $articles = $articleRequest->getAllArticles();
                     <li class="breadcrumb-item active">Publisher</li>
                 </ol>
                 <div class="card mb-4">
+                    <div class="card-body">
+                        <form action="" method="get">
+                            <div class="input-group">
+                                <input type="text" id="searchArticle" class="form-control" placeholder="Rechercher un article" name="searchID">
+                                <button class="btn btn-primary" id="searchbtn" type="submit" name="btnSubmit">Rechercher</button>
+                            </div>
+                        </form>
+                        <br style="display: <?php echo $display ?>">
+                        <div class="card" id="result_search" style="width: 100%; display: <?php echo $display ?>">
+                            <?php
+                                if ($article != null) {
+                                    echo '<div class="card-body">';
+                                    echo '<h5 class="card-title" id="titleAR">Article</h5>';
+                                    echo '<h6 class="card-subtitle mb-2 text-muted" id="auteurAR">'.$article->getAuthor().'</h6>';
+                                    echo '<p class="card-text" id="contentAR">'.$article->getContent().'</p>';
+                                    echo '<i class="card-text" id="dateAR"> Publié le : '.$article->getDate_add().'</i>';
+                                    echo '<p class="card-text text-success font-weight-bold" id="likeAR"> Likes : '.$publisherRequest->getNbLikesFromArticle($article).'</p>';
+                                    echo '<p class="card-text text-danger font-weight-bold" id="dislikeAR"> Dislikes : '.$publisherRequest->getNbDislikesFromArticle($article).'</p>';
+                                    echo '<form action="" method="get">';
+                                    // Si l'utilisateur est le propriétaire de l'article, il ne peut pas liker ou disliker
+                                    if (!Article::isOwner($user, $article)) {
+                                        echo '<button type="submit" name="likeAR" value="clicked" class="btn btn-success">Liker</button>';
+                                        echo " ";
+                                        echo '<button type="submit" name="dislikeAR" value="clicked" class="btn btn-danger">Disliker</button>';
+                                    } else {
+                                        echo '<a href="#" id="link-del" class="link-warning">Modifier</a>';
+                                        echo " ";
+                                    }
+                                    echo '</form>';
+                                    echo '</div>';
+                                }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-table me-1"></i>
                         Articles
@@ -128,17 +203,25 @@ $articles = $articleRequest->getAllArticles();
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>contenu</th>
-                                <th>Date date de publication</th>
+                                <th>Contenu</th>
+                                <th>Date de publication</th>
                                 <th>Auteur</th>
+                                <th>Likes</th>
+                                <th>Dislikes</th>
+                                <th>Éditer</th>
+                                <th>Supprimer</th>
                             </tr>
                             </thead>
                             <tfoot>
                             <tr>
                                 <th>ID</th>
-                                <th>contenu</th>
+                                <th>Contenu</th>
                                 <th>Date date de publication</th>
                                 <th>Auteur</th>
+                                <th>Likes</th>
+                                <th>Dislikes</th>
+                                <th>Éditer</th>
+                                <th>Supprimer</th>
                             </tr>
                             </tfoot>
                             <tbody>
@@ -149,10 +232,24 @@ $articles = $articleRequest->getAllArticles();
                                 echo "<td>".$value['content']."</td>";
                                 echo "<td>".$value['date_de_publication']."</td>";
                                 echo "<td>".$value['author']."</td>";
+                                $article = $articleRequest->getArticle($value['article_id']);
+                                echo "<td>".$publisherRequest->getNbLikesFromArticle($article)."</td>";
+                                echo "<td>".$publisherRequest->getNbDislikesFromArticle($article)."</td>";
+                                if (Article::isOwner($user, $article)) {
+                                    echo "<td><a id='link-del' class='link-success' href='editarticle.php?id=".$value['article_id']."'>Modifier</a></td>";
+                                    echo "<td><a id='link-del' class='link-danger' href='deleteconfirm.php?id=".$value['article_id']."'>Supprimer</a></td>";
+                                } else {
+                                    echo '<td class="bg-secondary"></td>';
+                                    echo '<td class="bg-secondary"></td>';
+                                }
                                 echo "</tr>";
                             }
                             ?>
                             <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -180,9 +277,6 @@ $articles = $articleRequest->getAllArticles();
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script src="js/scripts.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-<script src="assets/demo/chart-area-demo.js"></script>
-<script src="assets/demo/chart-bar-demo.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
 <script src="js/datatables-simple-demo.js"></script>
 </body>

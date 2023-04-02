@@ -2,8 +2,10 @@
 require_once __DIR__ . "/../../model/dao/requests/ArticleRequest.php";
 require_once __DIR__ . "/../../model/dao/requests/UserRequest.php";
 require_once __DIR__ . "/../../model/User.php";
+require_once __DIR__ . "/../../model/Article.php";
+require_once __DIR__ . "/../../model/dao/requests/MOPRequest.php";
 
-use model\User;
+use model\dao\requests\MOPRequest;
 use model\dao\requests\ArticleRequest;
 use model\dao\requests\UserRequest;
 
@@ -19,20 +21,33 @@ if ($session_duration > 3600) {
     exit();
 }
 
-$articleRequest = new ArticleRequest();
-$userRequest = new UserRequest();
-if ($_SESSION['login'] == 'anonyme'){
-    $user = new User('anonyme', 'anonyme', 'anonyme');
-} else {
-    $user = $userRequest->getUser($_SESSION['login']);
-}
-
-// If the user is not a moderator, redirect him to the index page
-if (!$user->isModerator()) {
+if ($_SESSION['login'] == 'anonyme') {
     header('Location: index.php');
     exit();
+} else {
+    $userRequest = new UserRequest();
+    $user = $userRequest->getUser($_SESSION['login']);
+    if (!$user->isModerator() && !$user->isMaster()) {
+        header('Location: index.php');
+        exit();
+    }
 }
+
+$articleRequest = new ArticleRequest();
 $articles = $articleRequest->getAllArticles();
+$moderatorRequest = new MOPRequest();
+$article = null;
+$display = "none";
+
+// RECHERCHE
+if (isset($_GET['btnSubmit']) && strlen($_GET['searchID']) > 0) {
+    $search = $_GET['searchID'];
+    $article = $articleRequest->getArticle($search);
+    $display = "block";
+    $cookieValue = serialize(array("idArticle" => $search, "displayStat" => $display));
+    setcookie("search", $cookieValue, time() + 3600, "/");
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -43,7 +58,8 @@ $articles = $articleRequest->getAllArticles();
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Tableau de bord</title>
+    <title>Moderateur panel</title>
+    <link rel="icon" type="image/png" href="onglet_icon.png">
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -69,7 +85,7 @@ $articles = $articleRequest->getAllArticles();
         <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
             <div class="sb-sidenav-menu">
                 <div class="nav">
-                    <div class="sb-sidenav-menu-heading">Core</div>
+                    <div class="sb-sidenav-menu-heading">PRINCIPALE</div>
                     <a class="nav-link" href="index.php" >
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-fire"></i></div>
                         Tableau de bord
@@ -82,27 +98,15 @@ $articles = $articleRequest->getAllArticles();
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-shield"></i></div>
                         Moderators
                     </a>
-                    <div class="sb-sidenav-menu-heading">Master</div>
+                    <div class="sb-sidenav-menu-heading">GESTION</div>
                     <a class="nav-link" href="adminpanel.php" >
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-user-shield"></i></div>
-                        Admin panel
+                        Admin Panel
                     </a>
-
-                    <!--
-                    <div class="sb-sidenav-menu-heading">Addons</div>
-                    <a class="nav-link" href="charts.html">
-                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                        Charts
-                    </a>
-                    <a class="nav-link" href="tables.html">
-                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                        Tables
-                    </a>
-                    -->
                 </div>
             </div>
             <div class="sb-sidenav-footer">
-                <div class="small">Logged in as :</div>
+                <div class="small">Connecté en tant que :</div>
                 <?php echo strtoupper($_SESSION['role']) ." ". $_SESSION['login']; ?>
             </div>
         </nav>
@@ -119,14 +123,44 @@ $articles = $articleRequest->getAllArticles();
                 <!--Barre de recherche-->
                 <div class="card mb-4">
                     <div class="card-body">
-                        <form action="" method="post">
+                        <form action="" method="get">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Rechercher un article" name="search">
-                                <button class="btn btn-primary" type="submit">Rechercher</button>
+                                <input type="text" id="searchArticle" class="form-control" placeholder="Rechercher un article" name="searchID">
+                                <button class="btn btn-primary" id="searchbtn" type="submit" name="btnSubmit">Rechercher</button>
                             </div>
                         </form>
+                        <br style="display: <?php echo $display ?>">
+                        <div class="card" id="result_search" style="width: 100%; display: <?php echo $display ?>">
+                            <?php
+                            if ($article != null) {
+                                echo '<div class="card-body">';
+                                echo '<h5 class="card-title" id="titleAR">Article</h5>';
+                                echo '<h6 class="card-subtitle mb-2 text-muted" id="auteurAR">'.$article->getAuthor().'</h6>';
+                                echo '<p class="card-text" id="contentAR">'.$article->getContent().'</p>';
+                                echo '<i class="card-text" id="dateAR"> Publié le : '.$article->getDate_add().'</i>';
+                                echo '<p class="card-text" id="likes">Likes : '.$moderatorRequest->getNbLikesFromArticle($article).'</p>';
+                                echo '<p class="card-text" id="dislikes">Dislikes : '.$moderatorRequest->getNbDislikesFromArticle($article).'</p>';
+                                echo '<p class="card-text" id="idAR">Utilisateurs qui ont likés :</p>';
+                                echo '<div class="separator-breadcrumb border-top"></div>';
+                                foreach ($moderatorRequest->getUsersWhoLiked($article) as $index => $item) {
+                                    for ($i = 0; $i < count($item); $i++) {
+                                        echo '<code>'.$item['id_username'].'</code>';
+                                    }
+                                }
+                                echo '<div class="separator-breadcrumb border-top"></div>';
+                                echo '<p class="card-text" id="idAR">Utilisateurs qui ont dislikés :</p>';
+                                echo '<div class="separator-breadcrumb border-top"></div>';
+                                foreach ($moderatorRequest->getUsersWhoDisliked($article) as $user) {
+                                    echo '<code>'.implode(' ', $user).'</code>';
+                                }
+                                echo '<div class="separator-breadcrumb border-top"></div>';
+                                echo '<br>';
+                                echo '<a href="deleteconfirm.php?id='.$article->getId().'" id="link-del" class="link-danger">Supprimer l\'article</a>';
+                                echo '</div>';
+                            }
+                            ?>
+                        </div>
                     </div>
-                    <!-- Tableau des articles-->
                 </div>
                 <div class="card mb-4">
                     <div class="card-header">
@@ -196,9 +230,6 @@ $articles = $articleRequest->getAllArticles();
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script src="js/scripts.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-<script src="assets/demo/chart-area-demo.js"></script>
-<script src="assets/demo/chart-bar-demo.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
 <script src="js/datatables-simple-demo.js"></script>
 </body>

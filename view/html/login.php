@@ -4,9 +4,11 @@ require_once(__DIR__ . "/../../libs/jwt-utils.php");
 use model\dao\requests\UserRequest;
 
 session_start();
-if (isset($_GET['login'])) {
+if (isset($_SESSION['login'])) {
     session_destroy();
-    exit();
+    if (isset($_COOKIE['search'])) {
+        setcookie('login', '', time() - 3600);
+    }
 }
 
 # Variables
@@ -63,6 +65,7 @@ if (isset($_POST['btn-validate'])) {
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Connexion</title>
+        <link rel="icon" type="image/png" href="onglet_icon.png">
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>

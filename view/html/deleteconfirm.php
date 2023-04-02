@@ -4,7 +4,7 @@ use model\dao\requests\ArticleRequest;
 
 session_start();
 if (!isset($_SESSION['login'])) {
-    header('Location: login.php');
+    header("Location: login.php");
     exit();
 }
 
@@ -31,15 +31,19 @@ if (isset($_POST['confirmo'])) {
 <head>
     <meta charset="UTF-8">
     <title>Suppression</title>
+    <link href="css/styles.css" rel="stylesheet" />
 </head>
-
 <body>
-    <h1>Suppression</h1>
-    <p>Êtes-vous sûr de vouloir supprimer cet élément ?</p>
+<div class="container">
+    <h1 class="mt-5">Suppression</h1>
+    <p class="lead">Êtes-vous sûr de vouloir supprimer cet article ?</p>
     <form action="" class="form-control" method="post">
         <input type="hidden" name="id" value="<?php echo $id; ?>">
-        <input type="submit" name="confirmo" value="Oui">
-        <input type="submit" name="confirmn" value="Non">
+        <button type="submit" name="confirmo" class="btn btn-danger mr-2">Oui</button>
+        <button type="submit" name="confirmn" class="btn btn-secondary">Non</button>
     </form>
+</div>
+</body>
+</html>
 
 
