@@ -22,6 +22,9 @@
 * **[Accès à la ressource](http://article-manager.byethost7.com/controller/server-api.php)**
 * **[Serveur d'autentification JWT](http://article-manager.byethost7.com/controller/jwt-auth.php)**
 * **[Client](http://article-manager.byethost7.com/view/html/login.php)** `Etat: Partielement fonctionel ✅`
+  * Utilisateur anonyme :
+    * `username` : anonyme
+    * `password` : anonymous
 
 ---
 
