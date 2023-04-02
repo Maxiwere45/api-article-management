@@ -31,6 +31,7 @@ if (isset($_POST['confirmo'])) {
 <head>
     <meta charset="UTF-8">
     <title>Suppression</title>
+    <link rel="icon" type="image/png" href="onglet_icon.png">
     <link href="css/styles.css" rel="stylesheet" />
 </head>
 <body>

@@ -1,7 +1,11 @@
+<?php
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Ma page de carte Bootstrap centrée</title>
+    <title>Edition d'article</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- CSS Bootstrap -->
