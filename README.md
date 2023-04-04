@@ -28,7 +28,8 @@
 
 ---
 
-* `Attention ⚠️`, les liens d'accès sont en maintenance
+* `Attention ⚠️`, les liens d'accès sont en maintenance mais *fonctionnel*. 
+ * Mise en place de l'URL Re-writing en cours
 * En cas de problème, veuillez suivre les instructions d'installation `installation.md` pour lancer l'API en local.
 * Veuillez vous assurer que votre navigateur ou application client supporte le `JavaScript` (sauf en local).
 
