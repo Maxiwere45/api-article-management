@@ -204,7 +204,7 @@ Il existe 3 fonctions principales :
   * **Modèle MVC** : Modèle, Vue, Contrôleur
   * **DAO** : Data Access Object
   * **Frontend** : `HTML`, `CSS`, `JS`
-  * **Backend** : `PHP`, `MySQL`
+  * **Backend** : `PHP`, `MySQL (WAMP)`
   * **API** : `REST`
   * **Authentification** : JSON Web Token `JWT`
   * **Sécurité** : `XSS`, `CSRF`, `SQL Injection`
